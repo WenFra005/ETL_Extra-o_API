@@ -1,8 +1,10 @@
 import requests
 
-# replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
-url = https://www.alphavantage.co/query?from_currency=BRL&to_currency=JPY&function=CURRENCY_EXCHANGE_RATE
-r = requests.get(url)
-data = r.json()
+def extract_data():
+    url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
+    response = requests.get(url)
+    data = response.json()
 
-print(data)
+    print(data)
+
+extract_data()
