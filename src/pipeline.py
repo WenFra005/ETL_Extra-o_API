@@ -1,5 +1,6 @@
 import requests
 from tinydb import TinyDB
+from datetime import datetime
 
 def extract_data():
     url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
@@ -11,13 +12,16 @@ def transform_data(data):
     moeda_origem = data['USDBRL']['code']
     moeda_destino = data['USDBRL']['codein']
     valor_de_compra = data['USDBRL']['bid']
-    data_timestamp = data['USDBRL']['timestamp']
+    timestamp_moeda = datetime.fromtimestamp(int(data['USDBRL']['timestamp'])).strftime('%d/%m/%Y %H:%M')
+    timestamp_criacao = datetime.now().strftime('%d/%m/%Y %H:%M')
 
     data_transformed = {
         "moeda": moeda_origem,
         "moeda_destino": moeda_destino,
         "valor_de_compra": valor_de_compra,
-        "data_timestamp": data_timestamp
+        "timestamp_moeda": timestamp_moeda,
+        "timestamp_criacao": timestamp_criacao
+
     }
 
     return data_transformed
