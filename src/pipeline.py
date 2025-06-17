@@ -8,12 +8,14 @@ def extract_data():
     return data
 
 def transform_data(data):
-    moeda = data['USDBRL']['code']
+    moeda_origem = data['USDBRL']['code']
+    moeda_destino = data['USDBRL']['codein']
     valor_de_compra = data['USDBRL']['bid']
     data_timestamp = data['USDBRL']['timestamp']
 
     data_transformed = {
-        "moeda": moeda,
+        "moeda": moeda_origem,
+        "moeda_destino": moeda_destino,
         "valor_de_compra": valor_de_compra,
         "data_timestamp": data_timestamp
     }
