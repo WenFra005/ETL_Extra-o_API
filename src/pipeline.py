@@ -5,6 +5,6 @@ def extract_data():
     response = requests.get(url)
     data = response.json()
 
-    print(data)
+    return data
 
-extract_data()
+print(extract_data()["USDBRL"])
