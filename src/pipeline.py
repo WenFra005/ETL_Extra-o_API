@@ -1,4 +1,5 @@
 import requests
+from tinydb import TinyDB
 
 def extract_data():
     url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
@@ -19,7 +20,13 @@ def transform_data(data):
 
     return data_transformed
 
+def save_data(data, db_name="dolar_data.json"):
+    db = TinyDB(db_name)
+    db.insert(data)
+    print("Dados salvos com sucesso no banco de dados.")
+    
 if __name__ == "__main__":
     data = extract_data()
     transformed_data = transform_data(data)
+    save_data(transformed_data)
     print(transformed_data)
