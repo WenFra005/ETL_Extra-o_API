@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 from database import Base, DolarData
 
-load_dotenv(dotenv_path=".src\\SQL\\.env")
+load_dotenv()
 
 POSTGRES_USER = os.getenv("POSTGRES_USER")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
@@ -43,7 +43,7 @@ def transform_data(data):
     timestamp_criacao = datetime.now(UTC)
 
     data_transformed = {
-        "moeda": moeda_origem,
+        "moeda_origem": moeda_origem,
         "moeda_destino": moeda_destino,
         "valor_de_compra": valor_de_compra,
         "timestamp_moeda": timestamp_moeda,
