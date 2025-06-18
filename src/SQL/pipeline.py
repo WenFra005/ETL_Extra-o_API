@@ -71,7 +71,7 @@ if __name__ == "__main__":
                 transformed_data = transform_data(data_json)
                 print("Dados transformados:", transformed_data)
                 save_data_postgres(transformed_data)
-            time.sleep(100)
+            time.sleep(90)
         except KeyboardInterrupt:
             print("Pipeline interrompido pelo usuário.")
             break
