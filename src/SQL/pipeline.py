@@ -1,5 +1,4 @@
 import time
-from turtle import dot
 from dotenv import load_dotenv
 import requests
 from datetime import UTC, datetime
