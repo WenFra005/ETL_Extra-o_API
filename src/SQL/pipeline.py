@@ -41,10 +41,13 @@ def create_tables():
 def extract_data():
     url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
     response = requests.get(url)
-    data = response.json()
+    if response.status_code == 200:
+        logger.info("Dados extraídos com sucesso da API.")
+        return response.json()
+    else:
+        logger.error(f"Erro ao acessar a API: {response.status_code} - {response.text}")
+        return None
     
-    return data
-
 def transform_data(data):
     moeda_origem = data['USDBRL']['code']
     moeda_destino = data['USDBRL']['codein']
