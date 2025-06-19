@@ -78,6 +78,5 @@ if __name__ == "__main__":
             print(f"Ocorreu um erro: {e}")
             time.sleep(50)
             print("Tentando novamente após 50 segundos...")
-            continue
     print("Pipeline finalizado.")
     
