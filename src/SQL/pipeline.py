@@ -4,7 +4,6 @@ import time
 from venv import logger
 from dotenv import load_dotenv
 import logfire
-from psycopg2 import Timestamp
 import requests
 from datetime import UTC, datetime
 from sqlalchemy import create_engine
