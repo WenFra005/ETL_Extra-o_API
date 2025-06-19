@@ -79,23 +79,38 @@ def save_data_postgres(data):
     finally:
         session.close()
 
+def pipeline():
+    with logfire.span("Executando o pipeline de dados"):
+
+        with logfire.span("Extraindo dados"):
+            data = extract_data()
+        
+        if not data:
+            logger.error("Nenhum dado foi extraído. Encerrando o pipeline.")
+            return
+        
+        with logfire.span("Transformando dados"):
+            transformed_data = transform_data(data)
+        
+        with logfire.span("Salvando dados no PostgreSQL"):
+            save_data_postgres(transformed_data)
+        
+        logger.info("Pipeline de dados concluído com sucesso.")
+
 if __name__ == "__main__":
     create_tables()
     logger.info("Iniciando o pipeline de dados...")
 
     while True:
         try:
-            data = extract_data()
-            transformed_data = transform_data(data)
-            logger.info("Dados transformados:", transformed_data)
-            save_data_postgres(transformed_data)
+            pipeline()
             logger.info("Aguardando 1 minuto para a próxima execução...")
             time.sleep(60)
         except KeyboardInterrupt:
             logger.info("Pipeline interrompido pelo usuário.")
             break
         except Exception as e:
-            logger.error(f"Ocorreu um erro: {e}")
+            logger.error(f"Ocorreu um erro inesperado: {e}")
             time.sleep(30)
     logger.info("Pipeline finalizado.")
     
