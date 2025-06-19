@@ -1,11 +1,22 @@
+from logging import basicConfig, getLogger
+import logging
 import time
+from venv import logger
 from dotenv import load_dotenv
+import logfire
 import requests
 from datetime import UTC, datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import os
 from database import Base, DolarData
+
+logfire.configure()
+basicConfig(handlers=[logfire.LogfireHandler()])
+logger = getLogger(__name__)
+logger.setLevel(logging.INFO)
+logfire.instrument_requests
+logfire.instrument_sqlalchemy()
 
 load_dotenv()
 
@@ -25,7 +36,7 @@ Session = sessionmaker(bind=engine)
 
 def create_tables():
     Base.metadata.create_all(engine)
-    print("Tabelas criadas com sucesso.")
+    logger.info("Tabelas criadas com sucesso.")
 
 def extract_data():
     url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
@@ -57,26 +68,25 @@ def save_data_postgres(data):
     session.add(novo_registro)
     session.commit()
     session.close()
-    print("Dados salvos com sucesso no banco de dados PostgreSQL.")
+    logger.info("Dados salvos com sucesso no banco de dados PostgreSQL.")
 
 if __name__ == "__main__":
     create_tables()
-    print("Iniciando o pipeline de dados...")
+    logger.info("Iniciando o pipeline de dados...")
 
     while True:
         try:
             data = extract_data()
             transformed_data = transform_data(data)
-            print("Dados transformados:", transformed_data)
+            logger.info("Dados transformados:", transformed_data)
             save_data_postgres(transformed_data)
-            print("Aguardando 1 minuto para a próxima execução...")
+            logger.info("Aguardando 1 minuto para a próxima execução...")
             time.sleep(60)
         except KeyboardInterrupt:
-            print("Pipeline interrompido pelo usuário.")
+            logger.info("Pipeline interrompido pelo usuário.")
             break
         except Exception as e:
-            print(f"Ocorreu um erro: {e}")
-            print("Tentando novamente após 30 segundos...")
+            logger.error(f"Ocorreu um erro: {e}")
             time.sleep(30)
-    print("Pipeline finalizado.")
+    logger.info("Pipeline finalizado.")
     
