@@ -53,7 +53,7 @@ def transform_data(data):
     moeda_destino = data['USDBRL']['codein']
     valor_de_compra = data['USDBRL']['bid']
     timestamp_moeda = datetime.fromtimestamp(int(data['USDBRL']['timestamp']), UTC)
-    timestamp_criacao = datetime.now(UTC)
+    timestamp_criacao = datetime.now()
 
     data_transformed = {
         "moeda_origem": moeda_origem,
