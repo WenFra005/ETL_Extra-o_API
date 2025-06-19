@@ -4,6 +4,7 @@ import time
 from venv import logger
 from dotenv import load_dotenv
 import logfire
+from psycopg2 import Timestamp
 import requests
 from datetime import UTC, datetime
 from sqlalchemy import create_engine
@@ -67,11 +68,16 @@ def transform_data(data):
 
 def save_data_postgres(data):
     session = Session()
-    novo_registro = DolarData(**data)
-    session.add(novo_registro)
-    session.commit()
-    session.close()
-    logger.info("Dados salvos com sucesso no banco de dados PostgreSQL.")
+    try:
+        novo_registro = DolarData(**data)
+        session.add(novo_registro)
+        session.commit()
+        logger.info(f"[{datetime.now}] Dados salvos com sucesso no banco de dados PostgreSQL.")
+    except Exception as e:
+        logger.error(f"Erro ao salvar dados no PostgreSQL: {e}")
+        session.rollback()
+    finally:
+        session.close()
 
 if __name__ == "__main__":
     create_tables()
