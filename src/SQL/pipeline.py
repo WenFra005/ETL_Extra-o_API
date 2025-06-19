@@ -65,13 +65,12 @@ if __name__ == "__main__":
 
     while True:
         try:
-            data_json = extract_data()
-            if data_json:
-                transformed_data = transform_data(data_json)
-                print("Dados transformados:", transformed_data)
-                save_data_postgres(transformed_data)
-            time.sleep(90)
+            dat = extract_data()
+            transformed_data = transform_data(data_json)
+            print("Dados transformados:", transformed_data)
+            save_data_postgres(transformed_data)
             print("Aguardando 90 segundos para a próxima extração...")
+            time.sleep(90)
         except KeyboardInterrupt:
             print("Pipeline interrompido pelo usuário.")
             break
