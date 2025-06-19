@@ -12,7 +12,7 @@ import os
 from database import Base, DolarData
 
 logfire.configure()
-basicConfig(handlers=[logfire.LogfireHandler()])
+basicConfig(handlers=[logfire.LogfireLoggingHandler()])
 logger = getLogger(__name__)
 logger.setLevel(logging.INFO)
 logfire.instrument_requests
