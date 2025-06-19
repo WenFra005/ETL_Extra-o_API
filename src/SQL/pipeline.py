@@ -65,8 +65,8 @@ if __name__ == "__main__":
 
     while True:
         try:
-            dat = extract_data()
-            transformed_data = transform_data(data_json)
+            data = extract_data()
+            transformed_data = transform_data(data)
             print("Dados transformados:", transformed_data)
             save_data_postgres(transformed_data)
             print("Aguardando 90 segundos para a próxima extração...")
