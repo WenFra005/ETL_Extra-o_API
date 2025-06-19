@@ -40,10 +40,9 @@ def create_tables():
     logger.info("Tabelas criadas com sucesso.")
 
 def extract_data():
-    url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
+    url = 'https://economia.awesomeapi.com.br/json/last/USD-BRL'
     response = requests.get(url)
     if response.status_code == 200:
-        logger.info("Dados extraídos com sucesso da API.")
         return response.json()
     else:
         logger.error(f"Erro ao acessar a API: {response.status_code} - {response.text}")
@@ -72,7 +71,7 @@ def save_data_postgres(data):
         novo_registro = DolarData(**data)
         session.add(novo_registro)
         session.commit()
-        logger.info(f"[{datetime.now}] Dados salvos com sucesso no banco de dados PostgreSQL.")
+        logger.info(f"[{data['timestamp_criacao'].strftime('%d/%m/%y %H:%M:%S')}] Dados salvos com sucesso no banco de dados PostgreSQL.")
     except Exception as e:
         logger.error(f"Erro ao salvar dados no PostgreSQL: {e}")
         session.rollback()
@@ -111,6 +110,4 @@ if __name__ == "__main__":
             break
         except Exception as e:
             logger.error(f"Ocorreu um erro inesperado: {e}")
-            time.sleep(30)
-    logger.info("Pipeline finalizado.")
-    
+            time.sleep(30)    
