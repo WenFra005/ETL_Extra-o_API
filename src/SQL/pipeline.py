@@ -69,14 +69,14 @@ if __name__ == "__main__":
             transformed_data = transform_data(data)
             print("Dados transformados:", transformed_data)
             save_data_postgres(transformed_data)
-            print("Aguardando 90 segundos para a próxima extração...")
-            time.sleep(90)
+            print("Aguardando 1 minuto para a próxima execução...")
+            time.sleep(60)
         except KeyboardInterrupt:
             print("Pipeline interrompido pelo usuário.")
             break
         except Exception as e:
             print(f"Ocorreu um erro: {e}")
-            time.sleep(50)
-            print("Tentando novamente após 50 segundos...")
+            print("Tentando novamente após 30 segundos...")
+            time.sleep(30)
     print("Pipeline finalizado.")
     
