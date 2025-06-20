@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import os
 from database import Base, DolarData
+from zoneinfo import ZoneInfo
 
 logfire.configure()
 basicConfig(handlers=[logfire.LogfireLoggingHandler()])
@@ -51,8 +52,9 @@ def transform_data(data):
     moeda_origem = data['USDBRL']['code']
     moeda_destino = data['USDBRL']['codein']
     valor_de_compra = data['USDBRL']['bid']
-    timestamp_moeda = datetime.fromtimestamp(int(data['USDBRL']['timestamp']), UTC)
-    timestamp_criacao = datetime.now()
+    timestamp_moeda_utc = datetime.fromtimestamp(int(data['USDBRL']['timestamp']), UTC)
+    timestamp_moeda = timestamp_moeda_utc.astimezone(ZoneInfo("America/Sao_Paulo"))
+    timestamp_criacao = datetime.now(ZoneInfo("America/Sao_Paulo"))
 
     data_transformed = {
         "moeda_origem": moeda_origem,
