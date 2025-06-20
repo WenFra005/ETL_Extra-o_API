@@ -175,7 +175,8 @@ def save_data_postgres(Session, data, logger):
         session.add(novo_registro)
         session.commit()
         logger.info(
-            f"[{data['timestamp_criacao'].strftime('%d/%m/%y %H:%M:%S')}] Dados salvos com sucesso no banco de dados PostgreSQL."
+            f"[{data['timestamp_criacao'].strftime('%d/%m/%y %H:%M:%S')}] "
+            f"Dados salvos com sucesso no banco de dados PostgreSQL."
         )
     except Exception as e:
         logger.error(f"Erro ao salvar dados no PostgreSQL: {e}")
@@ -197,7 +198,7 @@ def pipeline(logger):
     with logfire.span("Executando o pipeline de dados"):
 
         with logfire.span("Extraindo dados"):
-            data = extract_data()
+            data = extract_data(logger)
 
         if not data:
             logger.error("Nenhum dado foi extraído. Encerrando o pipeline.")
@@ -215,12 +216,12 @@ def pipeline(logger):
 if __name__ == "__main__":
     logger = configure_ambient_logging()
     engine, Session = configure_database()
-    create_tables()
+    create_tables(engine, logger)
     logger.info("Iniciando o pipeline de dados...")
 
     while True:
         try:
-            pipeline()
+            pipeline(Session, logger)
             logger.info("Aguardando 1 minuto para a próxima execução...")
             time.sleep(60)
         except KeyboardInterrupt:
