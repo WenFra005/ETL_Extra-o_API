@@ -109,4 +109,5 @@ if __name__ == "__main__":
             break
         except Exception as e:
             logger.error(f"Ocorreu um erro inesperado: {e}")
-            time.sleep(30)    
+            time.sleep(30) 
+    logger.info("Pipeline encerrado.")
