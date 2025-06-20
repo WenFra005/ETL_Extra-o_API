@@ -13,36 +13,44 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-logfire.configure()
-basicConfig(handlers=[logfire.LogfireLoggingHandler()])
-logger = getLogger(__name__)
-logger.setLevel(logging.INFO)
-logfire.instrument_requests()
-logfire.instrument_sqlalchemy()
 
-load_dotenv()
+def configure_ambient_logging():
+    logfire.configure()
+    basicConfig(handlers=[logfire.LogfireLoggingHandler()])
+    logger = getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    logfire.instrument_requests()
+    logfire.instrument_sqlalchemy()
 
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-POSTGRES_PORT = os.getenv("POSTGRES_PORT")
-POSTGRES_DB = os.getenv("POSTGRES_DB")
-
-DATABASE_URL = (
-    f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-    f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
-)
-
-engine = create_engine(DATABASE_URL)
-Session = sessionmaker(bind=engine)
+    return logger
 
 
-def create_tables():
+def configure_database():
+    load_dotenv()
+
+    POSTGRES_USER = os.getenv("POSTGRES_USER")
+    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+    POSTGRES_HOST = os.getenv("POSTGRES_HOST")
+    POSTGRES_PORT = os.getenv("POSTGRES_PORT")
+    POSTGRES_DB = os.getenv("POSTGRES_DB")
+
+    DATABASE_URL = (
+        f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
+        f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+    )
+
+    engine = create_engine(DATABASE_URL)
+    Session = sessionmaker(bind=engine)
+
+    return engine, Session
+
+
+def create_tables(engine, logger):
     Base.metadata.create_all(engine)
     logger.info("Tabelas criadas com sucesso.")
 
 
-def extract_data():
+def extract_data(logger):
     url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
     response = requests.get(url)
     if response.status_code == 200:
@@ -71,7 +79,7 @@ def transform_data(data):
     return data_transformed
 
 
-def save_data_postgres(data):
+def save_data_postgres(Session, data, logger):
     session = Session()
     try:
         novo_registro = DolarData(**data)
@@ -87,7 +95,7 @@ def save_data_postgres(data):
         session.close()
 
 
-def pipeline():
+def pipeline(logger):
     with logfire.span("Executando o pipeline de dados"):
 
         with logfire.span("Extraindo dados"):
@@ -107,6 +115,8 @@ def pipeline():
 
 
 if __name__ == "__main__":
+    logger = configure_ambient_logging()
+    engine, Session = configure_database()
     create_tables()
     logger.info("Iniciando o pipeline de dados...")
 
