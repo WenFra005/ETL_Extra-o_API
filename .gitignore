@@ -192,3 +192,9 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Logfire
+#  Logfire is a logging and monitoring tool. `.logfire` specifies files/directories to
+#  exclude from logging and monitoring. Recommended for sensitive data.
+.logfire
+#  Learn more at https://logfire.dev/docs/ignore-files
