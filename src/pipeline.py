@@ -49,6 +49,7 @@ def configure_database():
     -------
     engine : sqlalchemy.engine.Engine
         Um objeto engine do SQLAlchemy configurado para se conectar ao banco de dados PostgreSQL.
+
     Session : sqlalchemy.orm.session.Session
         Uma classe de sessão do SQLAlchemy para interagir com o banco de dados.
     """
@@ -80,6 +81,7 @@ def create_tables(engine, logger):
     ----------
     engine : sqlalchemy.engine.Engine
         Um objeto engine do SQLAlchemy configurado para se conectar ao banco de dados PostgreSQL.
+
     logger : logging.Logger
         Um objeto logger configurado para registrar logs do pipeline de dados.
     """
@@ -159,6 +161,7 @@ def save_data_postgres(Session, data, logger):
     ----------
     Session : sqlalchemy.orm.session.Session
         Uma classe de sessão do SQLAlchemy para interagir com o banco de dados.
+
     data : dict
         Um dicionário contendo os dados transformados, que deve conter as chaves:
         - moeda_origem
@@ -192,6 +195,9 @@ def pipeline(Session, logger):
 
     Parameters
     ----------
+    Session : sqlalchemy.orm.session.Session
+        Uma classe de sessão do SQLAlchemy para interagir com o banco de dados.
+
     logger : logging.Logger
         Um objeto logger configurado para registrar logs do pipeline de dados.
     """
