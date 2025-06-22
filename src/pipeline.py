@@ -137,9 +137,10 @@ def transform_data(data):
     moeda_origem = data["USDBRL"]["code"]
     moeda_destino = data["USDBRL"]["codein"]
     valor_de_compra = data["USDBRL"]["bid"]
-    timestamp_moeda_utc = datetime.fromtimestamp(int(data["USDBRL"]["timestamp"]), UTC)
-    timestamp_moeda = timestamp_moeda_utc.astimezone(ZoneInfo("America/Sao_Paulo"))
-    timestamp_criacao = datetime.now(ZoneInfo("America/Sao_Paulo"))
+    timestamp_moeda = datetime.fromtimestamp(
+        int(data["USDBRL"]["timestamp"]), tz=UTC
+    ).astimezone(ZoneInfo("America/Sao_Paulo"))
+    timestamp_criacao = datetime.now(UTC).astimezone(ZoneInfo("America/Sao_Paulo"))
 
     data_transformed = {
         "moeda_origem": moeda_origem,
