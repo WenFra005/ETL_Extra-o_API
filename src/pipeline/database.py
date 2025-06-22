@@ -1,3 +1,7 @@
+"""
+Módulo para definição do modelo de dados da tabela `dolar_data` no banco de dados.
+"""
+
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Integer, String, Float, DateTime
 from datetime import datetime, UTC
@@ -6,6 +10,15 @@ Base = declarative_base()
 
 
 class DolarData(Base):
+    """
+    Classe que representa a tabela `dolar_data` no banco de dados.
+
+    Parameters
+    ----------
+    Base : sqlalchemy.orm.declarative_base
+        Classe base do SQLAlchemy para a definição de modelos ORM.
+    """
+
     __tablename__ = "dolar_data"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
