@@ -4,7 +4,7 @@ Módulo para definição do modelo de dados da tabela `dolar_data` no banco de d
 
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Integer, String, Float, DateTime
-from datetime import datetime, UTC
+from sqlalchemy import DateTime
 
 Base = declarative_base()
 
@@ -25,9 +25,5 @@ class DolarData(Base):
     moeda_origem = Column(String(3), nullable=False)
     moeda_destino = Column(String(3), nullable=False)
     valor_de_compra = Column(Float, nullable=False)
-    timestamp_moeda = Column(
-        DateTime, default=lambda: datetime.now(UTC), nullable=False
-    )
-    timestamp_criacao = Column(
-        DateTime, default=lambda: datetime.now(UTC), nullable=False
-    )
+    timestamp_moeda = Column(DateTime(timezone=True), nullable=False)
+    timestamp_criacao = Column(DateTime(timezone=True), nullable=False)
