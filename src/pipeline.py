@@ -185,7 +185,7 @@ def save_data_postgres(Session, data, logger):
         session.close()
 
 
-def pipeline(logger):
+def pipeline(Session, logger):
     """
     Executa o pipeline de dados, que consiste em extrair, transformar e salvar os dados
     no banco de dados PostgreSQL.
@@ -208,7 +208,7 @@ def pipeline(logger):
             transformed_data = transform_data(data)
 
         with logfire.span("Salvando dados no PostgreSQL"):
-            save_data_postgres(transformed_data)
+            save_data_postgres(Session, transformed_data, logger)
 
         logger.info("Pipeline de dados concluído com sucesso.")
 
