@@ -236,4 +236,5 @@ if __name__ == "__main__":
             except Exception as e:
                 logger.error(f"Ocorreu um erro inesperado: {e}")
                 time.sleep(30)
-            logger.info("Pipeline encerrado.")
+            logger.info("Pipeline finalizado.")
+    logger.info("Execução encerrada.")
