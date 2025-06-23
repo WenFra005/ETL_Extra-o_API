@@ -239,12 +239,13 @@ def health():
 
 
 if __name__ == "__main__":
-    threading.Thread(target=pipeline, daemon=True).start()
-    app.run(host="0.0.0.0", port=10000)
     logger = configure_ambient_logging()
     engine, Session = configure_database()
     create_tables(engine, logger)
     logger.info("Iniciando...")
+
+    threading.Thread(target=pipeline, args=(Session, logger), daemon=True).start()
+    app.run(host="0.0.0.0", port=10000)
 
     while True:
         with logfire.span("Executando o pipeline"):
