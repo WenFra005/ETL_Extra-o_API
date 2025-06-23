@@ -86,7 +86,7 @@ def create_tables(engine, logger):
         Um objeto logger configurado para registrar logs do pipeline de dados.
     """
     Base.metadata.create_all(engine)
-    logger.info("Tabelas criadas com sucesso.")
+    logger.info("Tabelas criadas/verificadas com sucesso.")
 
 
 def extract_data(logger):
@@ -236,5 +236,5 @@ if __name__ == "__main__":
             except Exception as e:
                 logger.error(f"Ocorreu um erro inesperado: {e}")
                 time.sleep(30)
-            logger.info("Pipeline finalizado.")
+        logger.info("Pipeline finalizado.")
     logger.info("Execução encerrada.")
