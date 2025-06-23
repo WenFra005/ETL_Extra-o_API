@@ -225,6 +225,33 @@ def pipeline(Session, logger):
     logger.info("Pipeline de dados concluído com sucesso.")
 
 
+def loop_pipeline(Session, logger):
+    """
+    Executa o pipeline de dados em um loop contínuo, com intervalos de espera entre as execuções.
+
+    Parameters
+    ----------
+    Session : sqlalchemy.orm.session.Session
+        Uma classe de sessão do SQLAlchemy para interagir com o banco de dados.
+    logger : logging.Logger
+        Um objeto logger configurado para registrar logs do pipeline de dados.
+    """
+    while True:
+        with logfire.span("Executando o pipeline"):
+            try:
+                pipeline(Session, logger)
+                logger.info("Aguardando 40 segundos para a próxima execução...")
+                time.sleep(40)
+            except KeyboardInterrupt:
+                logger.info("Pipeline interrompido pelo usuário.")
+                break
+            except Exception as e:
+                logger.error(f"Ocorreu um erro inesperado: {e}")
+                time.sleep(30)
+        logger.info("Pipeline finalizado.")
+    logger.info("Execução encerrada.")
+
+
 @app.route("/")
 def health():
     """
@@ -244,20 +271,5 @@ if __name__ == "__main__":
     create_tables(engine, logger)
     logger.info("Iniciando...")
 
-    threading.Thread(target=pipeline, args=(Session, logger), daemon=True).start()
+    threading.Thread(target=loop_pipeline, args=(Session, logger), daemon=True).start()
     app.run(host="0.0.0.0", port=10000)
-
-    while True:
-        with logfire.span("Executando o pipeline"):
-            try:
-                pipeline(Session, logger)
-                logger.info("Aguardando 40 segundos para a próxima execução...")
-                time.sleep(40)
-            except KeyboardInterrupt:
-                logger.info("Pipeline interrompido pelo usuário.")
-                break
-            except Exception as e:
-                logger.error(f"Ocorreu um erro inesperado: {e}")
-                time.sleep(30)
-        logger.info("Pipeline finalizado.")
-    logger.info("Execução encerrada.")
