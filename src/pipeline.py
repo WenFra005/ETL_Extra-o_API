@@ -5,12 +5,14 @@ do dólar em relação ao real brasileiro (USD-BRL) em um banco de dados Postgre
 
 import logging
 import os
+import threading
 import time
 from datetime import UTC, datetime
 from logging import basicConfig, getLogger
 from venv import logger
 from zoneinfo import ZoneInfo
 
+from flask import Flask
 import logfire
 import requests
 from database import Base, DolarData
@@ -19,6 +21,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
+app = Flask(__name__)
 
 
 def configure_ambient_logging():
@@ -222,7 +225,22 @@ def pipeline(Session, logger):
     logger.info("Pipeline de dados concluído com sucesso.")
 
 
+@app.route("/")
+def health():
+    """
+    Endpoint de saúde do serviço. Retorna uma mensagem indicando que o serviço está ativo.
+
+    Returns
+    -------
+    str
+        Uma mensagem indicando que o serviço está ativo.
+    """
+    return "Serviço ativo e funcionando!"
+
+
 if __name__ == "__main__":
+    threading.Thread(target=pipeline, daemon=True).start()
+    app.run(host="0.0.0.0", port=10000)
     logger = configure_ambient_logging()
     engine, Session = configure_database()
     create_tables(engine, logger)
