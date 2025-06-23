@@ -18,6 +18,8 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+load_dotenv()
+
 
 def configure_ambient_logging():
     """
@@ -53,7 +55,6 @@ def configure_database():
     Session : sqlalchemy.orm.session.Session
         Uma classe de sessão do SQLAlchemy para interagir com o banco de dados.
     """
-    load_dotenv()
 
     POSTGRES_USER = os.getenv("POSTGRES_USER")
     POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
@@ -104,7 +105,10 @@ def extract_data(logger):
     data : dict or None
         Um dicionário contendo os dados extraídos da API, ou None se houver um erro na requisição.
     """
-    url = "https://economia.awesomeapi.com.br/json/last/USD-BRL"
+    TOKEN_AWESOMEAPI = os.getenv("TOKEN_AWESOMEAPI")
+    url = (
+        f"https://economia.awesomeapi.com.br/json/last/USD-BRL?token={TOKEN_AWESOMEAPI}"
+    )
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()
