@@ -202,39 +202,38 @@ def pipeline(Session, logger):
     logger : logging.Logger
         Um objeto logger configurado para registrar logs do pipeline de dados.
     """
-    with logfire.span("Executando o pipeline de dados"):
+    with logfire.span("Extraindo dados"):
+        data = extract_data(logger)
 
-        with logfire.span("Extraindo dados"):
-            data = extract_data(logger)
+    if not data:
+        logger.error("Nenhum dado foi extraído. Encerrando o pipeline.")
+        return
 
-        if not data:
-            logger.error("Nenhum dado foi extraído. Encerrando o pipeline.")
-            return
+    with logfire.span("Transformando dados"):
+        transformed_data = transform_data(data)
 
-        with logfire.span("Transformando dados"):
-            transformed_data = transform_data(data)
+    with logfire.span("Salvando dados no PostgreSQL"):
+        save_data_postgres(Session, transformed_data, logger)
 
-        with logfire.span("Salvando dados no PostgreSQL"):
-            save_data_postgres(Session, transformed_data, logger)
-
-        logger.info("Pipeline de dados concluído com sucesso.")
+    logger.info("Pipeline de dados concluído com sucesso.")
 
 
 if __name__ == "__main__":
     logger = configure_ambient_logging()
     engine, Session = configure_database()
     create_tables(engine, logger)
-    logger.info("Iniciando o pipeline de dados...")
+    logger.info("Iniciando...")
 
     while True:
-        try:
-            pipeline(Session, logger)
-            logger.info("Aguardando 1 minuto para a próxima execução...")
-            time.sleep(60)
-        except KeyboardInterrupt:
-            logger.info("Pipeline interrompido pelo usuário.")
-            break
-        except Exception as e:
-            logger.error(f"Ocorreu um erro inesperado: {e}")
-            time.sleep(30)
-    logger.info("Pipeline encerrado.")
+        with logfire.span("Executando o pipeline"):
+            try:
+                pipeline(Session, logger)
+                logger.info("Aguardando 40 segundos para a próxima execução...")
+                time.sleep(40)
+            except KeyboardInterrupt:
+                logger.info("Pipeline interrompido pelo usuário.")
+                break
+            except Exception as e:
+                logger.error(f"Ocorreu um erro inesperado: {e}")
+                time.sleep(30)
+            logger.info("Pipeline encerrado.")
