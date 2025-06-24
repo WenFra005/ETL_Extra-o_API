@@ -14,13 +14,14 @@ from logging import basicConfig, getLogger
 from venv import logger
 from zoneinfo import ZoneInfo
 
-from flask import Flask
 import logfire
 import requests
-from database import Base, DolarData
 from dotenv import load_dotenv
+from flask import Flask
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+from database import Base, DolarData
 
 load_dotenv()
 app = Flask(__name__)
