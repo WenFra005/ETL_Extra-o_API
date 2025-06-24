@@ -5,6 +5,8 @@ do dólar em relação ao real brasileiro (USD-BRL) em um banco de dados Postgre
 
 import logging
 import os
+import signal
+import sys
 import threading
 import time
 from datetime import UTC, datetime
@@ -252,6 +254,11 @@ def loop_pipeline(Session, logger):
     logger.info("Execução encerrada.")
 
 
+def handle_sigterm(_signum, _frame):
+    logger.info("Recebido sinal de término (SIGTERM). Encerrando o pipeline...")
+    sys.exit(0)
+
+
 @app.route("/")
 def health():
     """
@@ -267,6 +274,7 @@ def health():
 
 if __name__ == "__main__":
     logger = configure_ambient_logging()
+    signal.signal(signal.SIGTERM, handle_sigterm)
     engine, Session = configure_database()
     create_tables(engine, logger)
     logger.info("Iniciando...")
