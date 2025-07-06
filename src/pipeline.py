@@ -243,8 +243,8 @@ def loop_pipeline(Session, logger):
         with logfire.span("Executando o pipeline"):
             try:
                 pipeline(Session, logger)
-                logger.info("Aguardando 40 segundos para a próxima execução...")
-                time.sleep(40)
+                logger.info("Aguardando 30 segundos para a próxima execução...")
+                time.sleep(30)
             except KeyboardInterrupt:
                 logger.info("Pipeline interrompido pelo usuário.")
                 break
