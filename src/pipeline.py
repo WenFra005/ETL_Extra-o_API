@@ -3,7 +3,6 @@ Este módulo implementa um pipeline de dados que extrai, transforma e salva dado
 do dólar em relação ao real brasileiro (USD-BRL) em um banco de dados PostgreSQL.
 """
 
-import logging
 import os
 import signal
 import sys
@@ -18,65 +17,11 @@ import logfire
 import requests
 from dotenv import load_dotenv
 from flask import Flask
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
+from config import TOKEN_AWESOMEAPI, configure_ambient_logging, configure_database
 from database import Base, DolarData
 
-load_dotenv()
 app = Flask(__name__)
-
-
-def configure_ambient_logging():
-    """
-    Configura o ambiente de logging para o pipeline de dados. Configura o Logfire para registrar
-    logs e envia logs para o Logfire. Também configura o nível de log e os manipuladores de log.
-
-    Returns
-    -------
-    logger : logging.Logger
-        Um objeto logger configurado para registrar logs do pipeline de dados.
-    """
-    logfire.configure()
-    basicConfig(handlers=[logfire.LogfireLoggingHandler()])
-    logger = getLogger(__name__)
-    logger.setLevel(logging.INFO)
-    logfire.instrument_requests()
-    logfire.instrument_sqlalchemy()
-
-    return logger
-
-
-def configure_database():
-    """
-    Configura a conexão com o banco de dados PostgreSQL usando SQLAlchemy. Carrega as variáveis de
-    ambiente necessárias para a conexão e cria um objeto engine e uma sessão para interagir
-    com o banco de dados.
-
-    Returns
-    -------
-    engine : sqlalchemy.engine.Engine
-        Um objeto engine do SQLAlchemy configurado para se conectar ao banco de dados PostgreSQL.
-
-    Session : sqlalchemy.orm.session.Session
-        Uma classe de sessão do SQLAlchemy para interagir com o banco de dados.
-    """
-
-    POSTGRES_USER = os.getenv("POSTGRES_USER")
-    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-    POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-    POSTGRES_PORT = os.getenv("POSTGRES_PORT")
-    POSTGRES_DB = os.getenv("POSTGRES_DB")
-
-    DATABASE_URL = (
-        f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-        f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
-    )
-
-    engine = create_engine(DATABASE_URL)
-    Session = sessionmaker(bind=engine)
-
-    return engine, Session
 
 
 def create_tables(engine, logger):
@@ -111,7 +56,6 @@ def extract_data(logger):
     data : dict or None
         Um dicionário contendo os dados extraídos da API, ou None se houver um erro na requisição.
     """
-    TOKEN_AWESOMEAPI = os.getenv("TOKEN_AWESOMEAPI")
     url = (
         f"https://economia.awesomeapi.com.br/json/last/USD-BRL?token={TOKEN_AWESOMEAPI}"
     )
@@ -280,5 +224,5 @@ if __name__ == "__main__":
     create_tables(engine, logger)
     logger.info("Iniciando...")
 
-    threading.Thread(target=loop_pipeline, args=(Session, logger), daemon=True).start()
+    threading.Thread(target=loop_pipeline, args=(Session, logger)).start()
     app.run(host="0.0.0.0", port=10000)
