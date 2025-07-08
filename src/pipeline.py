@@ -4,6 +4,7 @@ do dólar em relação ao real brasileiro (USD-BRL) em um banco de dados Postgre
 """
 
 import signal
+import sys
 import threading
 import time
 from datetime import UTC, datetime
@@ -16,7 +17,15 @@ from flask import app
 
 from config import TOKEN_AWESOMEAPI, configure_ambient_logging, configure_database
 from database import Base, DolarData
-from health_api import handle_sigterm
+from health_api import app, handle_sigterm
+
+stop_event = threading.Event()
+
+
+def handle_sigterm(_signum, _frame):
+    logger.info("Recebido sinal de término (SIGTERM). Encerrando o pipeline...")
+    stop_event.set()
+    sys.exit(0)
 
 
 def create_tables(engine, logger):
@@ -178,15 +187,12 @@ def loop_pipeline(Session, logger):
     logger : logging.Logger
         Um objeto logger configurado para registrar logs do pipeline de dados.
     """
-    while True:
+    while not stop_event.is_set():
         with logfire.span("Executando o pipeline"):
             try:
                 pipeline(Session, logger)
                 logger.info("Aguardando 30 segundos para a próxima execução...")
-                time.sleep(30)
-            except KeyboardInterrupt:
-                logger.info("Pipeline interrompido pelo usuário.")
-                break
+                stop_event.wait(30)
             except Exception as e:
                 logger.error(f"Ocorreu um erro inesperado: {e}")
                 time.sleep(30)
