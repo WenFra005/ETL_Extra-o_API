@@ -4,7 +4,6 @@ do dólar em relação ao real brasileiro (USD-BRL) em um banco de dados Postgre
 """
 
 import signal
-import sys
 import threading
 import time
 from datetime import UTC, datetime
@@ -13,12 +12,11 @@ from zoneinfo import ZoneInfo
 
 import logfire
 import requests
-from flask import Flask
+from flask import app
 
 from config import TOKEN_AWESOMEAPI, configure_ambient_logging, configure_database
 from database import Base, DolarData
-
-app = Flask(__name__)
+from health_api import handle_sigterm
 
 
 def create_tables(engine, logger):
@@ -194,24 +192,6 @@ def loop_pipeline(Session, logger):
                 time.sleep(30)
         logger.info("Pipeline finalizado.")
     logger.info("Execução encerrada.")
-
-
-def handle_sigterm(_signum, _frame):
-    logger.info("Recebido sinal de término (SIGTERM). Encerrando o pipeline...")
-    sys.exit(0)
-
-
-@app.route("/")
-def health():
-    """
-    Endpoint de saúde do serviço. Retorna uma mensagem indicando que o serviço está ativo.
-
-    Returns
-    -------
-    str
-        Uma mensagem indicando que o serviço está ativo.
-    """
-    return "Serviço ativo e funcionando!"
 
 
 if __name__ == "__main__":
