@@ -20,6 +20,16 @@ stop_event = threading.Event()
 
 
 def handle_sigterm(_signum, _frame):
+    """
+    Gerencia o sinal de término (SIGTERM) para encerrar o pipeline.
+
+    Parameters
+    ----------
+    _signum : int
+        O número do sinal recebido.
+    _frame : frame
+        O frame atual do programa.
+    """
     logger.info("Recebido sinal de término (SIGTERM). Encerrando o pipeline...")
     stop_event.set()
     sys.exit(0)
