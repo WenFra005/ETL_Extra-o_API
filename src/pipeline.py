@@ -8,7 +8,6 @@ import sys
 import threading
 import time
 from datetime import UTC, datetime
-from venv import logger
 from zoneinfo import ZoneInfo
 
 import logfire
@@ -17,7 +16,7 @@ from flask import app
 
 from config import TOKEN_AWESOMEAPI, configure_ambient_logging, configure_database
 from database import Base, DolarData
-from health_api import app, handle_sigterm
+from health_api import app
 
 stop_event = threading.Event()
 
@@ -26,6 +25,10 @@ def handle_sigterm(_signum, _frame):
     logger.info("Recebido sinal de término (SIGTERM). Encerrando o pipeline...")
     stop_event.set()
     sys.exit(0)
+
+
+def run_flask():
+    app.run(host="0.0.0.0", port=10000)
 
 
 def create_tables(engine, logger):
@@ -207,5 +210,16 @@ if __name__ == "__main__":
     create_tables(engine, logger)
     logger.info("Iniciando...")
 
-    threading.Thread(target=loop_pipeline, args=(Session, logger)).start()
-    app.run(host="0.0.0.0", port=10000)
+    pipeline_thread = threading.Thread(target=loop_pipeline, args=(Session, logger))
+    flask_thread = threading.Thread(target=run_flask)
+
+    pipeline_thread.start()
+    flask_thread.start()
+    try:
+        while pipeline_thread.is_alive() and flask_thread.is_alive():
+            time.sleep(1)
+    except KeyboardInterrupt:
+        logger.info("Interrupção do teclado recebida. Encerrando o pipeline...")
+        stop_event.set()
+        pipeline_thread.join()
+        flask_thread.join()
