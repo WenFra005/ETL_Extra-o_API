@@ -3,19 +3,16 @@ Este módulo implementa um pipeline de dados que extrai, transforma e salva dado
 do dólar em relação ao real brasileiro (USD-BRL) em um banco de dados PostgreSQL.
 """
 
-import os
 import signal
 import sys
 import threading
 import time
 from datetime import UTC, datetime
-from logging import basicConfig, getLogger
 from venv import logger
 from zoneinfo import ZoneInfo
 
 import logfire
 import requests
-from dotenv import load_dotenv
 from flask import Flask
 
 from config import TOKEN_AWESOMEAPI, configure_ambient_logging, configure_database
