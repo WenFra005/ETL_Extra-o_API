@@ -1,5 +1,4 @@
 from flask import Flask
-from waitress import serve
 
 app = Flask(__name__)
 
@@ -15,7 +14,3 @@ def health():
         Uma mensagem indicando que o serviço está ativo.
     """
     return "Serviço ativo e funcionando!"
-
-
-if __name__ == "__main__":
-    serve(app, host="0.0.0.0", port=10000)
