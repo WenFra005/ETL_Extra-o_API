@@ -107,6 +107,8 @@ def loop_pipeline(Session, logger):
 
 
 if __name__ == "__main__":
+    # Este bloco permite rodar o pipeline ETL localmente, sem necessidade de servidor web (Flask).
+    # Use este arquivo para testes, execução manual ou scripts locais.
     logger = configure_ambient_logging()
     signal.signal(signal.SIGTERM, handle_sigterm)
     engine, Session = configure_database()
