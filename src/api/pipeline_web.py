@@ -8,7 +8,7 @@ import threading
 
 from flask import Flask
 
-from main import configure_ambient_logging, configure_database, loop_pipeline
+from src.main import configure_ambient_logging, configure_database, loop_pipeline
 
 app = Flask(__name__)
 
