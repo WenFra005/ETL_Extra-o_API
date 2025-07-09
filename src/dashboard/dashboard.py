@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import pandas as pd
 import psycopg2
 import streamlit as st
+from database.database import DolarData
 
 
 load_dotenv()
