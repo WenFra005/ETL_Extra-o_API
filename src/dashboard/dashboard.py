@@ -1,10 +1,13 @@
+"""
+Módulo responsável pelo dashboard Streamlit para visualização dos dados do dólar.
+"""
+
 import os
-from dotenv import load_dotenv
+
 import pandas as pd
 import psycopg2
 import streamlit as st
-from database.database import DolarData
-
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -16,6 +19,19 @@ POSTGRES_DB = os.getenv("POSTGRES_DB")
 
 
 def read_data_from_db():
+    """
+    Extrai dados do banco de dados PostgreSQL e retorna um DataFrame com os dados do dólar.
+
+    Returns
+    -------
+    df : pd.DataFrame
+        Um DataFrame contendo os dados do dólar.
+
+    Raises
+    ------
+    Exception
+        Se ocorrer um erro ao conectar ao banco de dados.
+    """
     try:
         conn = psycopg2.connect(
             host=POSTGRES_HOST,
@@ -42,6 +58,18 @@ def read_data_from_db():
 
 
 def main():
+    """
+    Função principal do dashboard Streamlit para visualização dos dados do dólar.
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    Exception
+        Se ocorrer um erro ao conectar ao banco de dados ou ao ler os dados.
+    """
     st.set_page_config(
         page_title="Dashboard de Dados do Dólar", page_icon=":dollar:", layout="wide"
     )

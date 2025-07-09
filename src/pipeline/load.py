@@ -1,3 +1,8 @@
+"""
+Módulo responsável pelo carregamento dos dados transformados no banco de dados PostgreSQL.
+"""
+
+
 def save_data_postgres(Session, data, logger):
     """
     Salva os dados transformados no banco de dados PostgreSQL. Utiliza uma sessão do SQLAlchemy para
@@ -19,6 +24,7 @@ def save_data_postgres(Session, data, logger):
         Um objeto logger configurado para registrar logs do pipeline de dados.
     """
     from database.database import DolarData
+
     session = Session()
     try:
         novo_registro = DolarData(**data)
@@ -32,4 +38,4 @@ def save_data_postgres(Session, data, logger):
         logger.error(f"Erro ao salvar dados no PostgreSQL: {e}")
         session.rollback()
     finally:
-        session.close() 
+        session.close()

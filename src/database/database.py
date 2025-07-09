@@ -1,10 +1,9 @@
 """
-Módulo para definição do modelo de dados da tabela `dolar_data` no banco de dados.
+Módulo de definição do modelo de dados e ORM para a tabela dolar_data no banco PostgreSQL.
 """
 
+from sqlalchemy import Column, DateTime, Float, Integer, String
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, Integer, String, Float, DateTime
-from sqlalchemy import DateTime
 
 Base = declarative_base()
 

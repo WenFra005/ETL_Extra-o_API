@@ -1,4 +1,7 @@
-""" Este módulo contém o endpoint de saúde do serviço."""
+"""
+Módulo responsável pelo endpoint de saúde (health check) do serviço.
+"""
+
 from flask import Flask
 
 app = Flask(__name__)

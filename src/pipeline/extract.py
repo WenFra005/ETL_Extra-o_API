@@ -1,5 +1,11 @@
+"""
+Módulo responsável pela extração de dados da cotação do dólar (USD-BRL) via API.
+"""
+
 import requests
+
 from config.config import TOKEN_AWESOMEAPI
+
 
 def extract_data(logger):
     """
@@ -24,4 +30,4 @@ def extract_data(logger):
         return response.json()
     else:
         logger.error(f"Erro ao acessar a API: {response.status_code} - {response.text}")
-        return None 
+        return None

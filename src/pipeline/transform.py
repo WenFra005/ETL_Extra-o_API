@@ -1,5 +1,10 @@
+"""
+Módulo responsável pela transformação dos dados extraídos da cotação do dólar (USD-BRL).
+"""
+
 from datetime import UTC, datetime
 from zoneinfo import ZoneInfo
+
 
 def transform_data(data):
     """
@@ -38,4 +43,4 @@ def transform_data(data):
         "timestamp_criacao": timestamp_criacao,
     }
 
-    return data_transformed 
+    return data_transformed

@@ -1,3 +1,7 @@
+"""
+Módulo de configuração do ambiente, variáveis e conexão com o banco de dados.
+"""
+
 import logging
 import os
 from logging import basicConfig, getLogger

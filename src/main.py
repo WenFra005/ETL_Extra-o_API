@@ -1,6 +1,7 @@
 """
-Este módulo implementa um pipeline de dados que extrai, transforma e salva dados da cotação
-do dólar em relação ao real brasileiro (USD-BRL) em um banco de dados PostgreSQL.
+Módulo principal para execução do pipeline ETL de cotação do dólar (USD-BRL).
+Este script inicializa o ambiente, cria as tabelas e executa o pipeline de extração, transformação
+e carga.
 """
 
 import signal
