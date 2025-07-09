@@ -9,6 +9,8 @@ import psycopg2
 import streamlit as st
 from dotenv import load_dotenv
 
+from src.database.database import DolarData
+
 load_dotenv()
 
 POSTGRES_USER = os.getenv("POSTGRES_USER")

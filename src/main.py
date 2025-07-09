@@ -11,11 +11,11 @@ import time
 
 import logfire
 
-from config.config import configure_ambient_logging, configure_database
-from database.database import Base
-from pipeline.extract import extract_data
-from pipeline.load import save_data_postgres
-from pipeline.transform import transform_data
+from src.config.config import configure_ambient_logging, configure_database
+from src.database.database import Base
+from src.pipeline.extract import extract_data
+from src.pipeline.load import save_data_postgres
+from src.pipeline.transform import transform_data
 
 stop_event = threading.Event()
 

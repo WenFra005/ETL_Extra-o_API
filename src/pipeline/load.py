@@ -23,7 +23,7 @@ def save_data_postgres(Session, data, logger):
     logger : logging.Logger
         Um objeto logger configurado para registrar logs do pipeline de dados.
     """
-    from database.database import DolarData
+    from src.database.database import DolarData
 
     session = Session()
     try:

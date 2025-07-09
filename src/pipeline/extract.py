@@ -4,7 +4,7 @@ Módulo responsável pela extração de dados da cotação do dólar (USD-BRL) v
 
 import requests
 
-from config.config import TOKEN_AWESOMEAPI
+from src.config.config import TOKEN_AWESOMEAPI
 
 
 def extract_data(logger):
