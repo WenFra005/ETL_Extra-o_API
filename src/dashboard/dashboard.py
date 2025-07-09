@@ -5,9 +5,9 @@ Módulo responsável pelo dashboard Streamlit para visualização dos dados do d
 import os
 
 import pandas as pd
-import psycopg2
 import streamlit as st
 from dotenv import load_dotenv
+from sqlalchemy import create_engine
 
 from src.database.database import DolarData
 
@@ -18,6 +18,12 @@ POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 POSTGRES_HOST = os.getenv("POSTGRES_HOST")
 POSTGRES_PORT = os.getenv("POSTGRES_PORT")
 POSTGRES_DB = os.getenv("POSTGRES_DB")
+
+DATABASE_URL = (
+    f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
+    f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+)
+engine = create_engine(DATABASE_URL)
 
 
 def read_data_from_db():
@@ -35,13 +41,6 @@ def read_data_from_db():
         Se ocorrer um erro ao conectar ao banco de dados.
     """
     try:
-        conn = psycopg2.connect(
-            host=POSTGRES_HOST,
-            password=POSTGRES_PASSWORD,
-            user=POSTGRES_USER,
-            port=POSTGRES_PORT,
-            database=POSTGRES_DB,
-        )
         query = """
         SELECT
             moeda_origem,
@@ -51,8 +50,7 @@ def read_data_from_db():
 		FROM dolar_data 
         ORDER BY timestamp_moeda DESC
         """
-        df = pd.read_sql(query, conn)
-        conn.close()
+        df = pd.read_sql(query, engine)
         return df
     except Exception as e:
         st.error(f"Erro ao conectar ao banco de dados: {e}")
