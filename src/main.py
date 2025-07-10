@@ -8,6 +8,7 @@ import datetime
 import signal
 import threading
 import time
+from zoneinfo import ZoneInfo
 
 import logfire
 
@@ -46,7 +47,7 @@ def is_within_allowed_time():
         Retorna True se o horário atual estiver dentro do intervalo permitido, caso contrário,
         retorna False.
     """
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(ZoneInfo("America/Sao_Paulo"))
     start = now.replace(hour=8, minute=0, second=0, microsecond=0)
     end = now.replace(hour=19, minute=0, second=0, microsecond=0)
     return start <= now <= end
@@ -64,7 +65,7 @@ def time_until_next_start():
         Um objeto timedelta representando o tempo restante até o próximo início permitido do
         pipeline.
     """
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(ZoneInfo("America/Sao_Paulo"))
     next_start = now.replace(hour=8, minute=0, second=0, microsecond=0)
     if now >= next_start:
         next_start = next_start + datetime.timedelta(days=1)
