@@ -43,7 +43,8 @@ def is_within_allowed_time():
     Returns
     -------
     bool
-        Retorna True se o horário atual estiver dentro do intervalo permitido, caso contrário, retorna False.
+        Retorna True se o horário atual estiver dentro do intervalo permitido, caso contrário,
+        retorna False.
     """
     now = datetime.datetime.now()
     start = now.replace(hour=8, minute=0, second=0, microsecond=0)
