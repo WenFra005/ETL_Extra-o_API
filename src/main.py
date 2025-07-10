@@ -4,8 +4,8 @@ Este script inicializa o ambiente, cria as tabelas e executa o pipeline de extra
 e carga.
 """
 
+import datetime
 import signal
-import sys
 import threading
 import time
 
@@ -33,7 +33,41 @@ def handle_sigterm(_signum, _frame):
     """
     logger.info("Recebido sinal de término (SIGTERM). Encerrando o pipeline...")
     stop_event.set()
-    sys.exit(0)
+
+
+def is_within_allowed_time():
+    """
+    Verifica se o horário atual está dentro do intervalo permitido para a execução do pipeline.
+    O intervalo permitido é das 08:00 às 19:00 (horário local).
+
+    Returns
+    -------
+    bool
+        Retorna True se o horário atual estiver dentro do intervalo permitido, caso contrário, retorna False.
+    """
+    now = datetime.datetime.now()
+    start = now.replace(hour=8, minute=0, second=0, microsecond=0)
+    end = now.replace(hour=19, minute=0, second=0, microsecond=0)
+    return start <= now <= end
+
+
+def time_until_next_start():
+    """
+    Calcula o tempo restante até o próximo início permitido do pipeline, que é às 08:00
+    do dia seguinte.
+    Se o horário atual já for após as 08:00, o próximo início será no dia seguinte às 08:00.
+
+    Returns
+    -------
+    datetime.timedelta
+        Um objeto timedelta representando o tempo restante até o próximo início permitido do
+        pipeline.
+    """
+    now = datetime.datetime.now()
+    next_start = now.replace(hour=8, minute=0, second=0, microsecond=0)
+    if now >= next_start:
+        next_start = next_start + datetime.timedelta(days=1)
+    return next_start - now
 
 
 def create_tables(engine, logger):
@@ -94,15 +128,24 @@ def loop_pipeline(Session, logger):
         Um objeto logger configurado para registrar logs do pipeline de dados.
     """
     while not stop_event.is_set():
-        with logfire.span("Executando o pipeline"):
-            try:
-                pipeline(Session, logger)
-                logger.info("Aguardando 30 segundos para a próxima execução...")
-                stop_event.wait(30)
-            except Exception as e:
-                logger.error(f"Ocorreu um erro inesperado: {e}")
-                time.sleep(30)
-        logger.info("Pipeline finalizado.")
+        if is_within_allowed_time():
+            with logfire.span("Executando o pipeline"):
+                try:
+                    pipeline(Session, logger)
+                    logger.info("Aguardando 30 segundos para a próxima execução...")
+                    stop_event.wait(30)
+                except Exception as e:
+                    logger.error(f"Ocorreu um erro inesperado: {e}")
+                    time.sleep(30)
+            logger.info("Pipeline finalizado.")
+        else:
+            time_remaining = time_until_next_start()
+            minutes, seconds = divmod(time_remaining.seconds, 60)
+            hours, minutes = divmod(minutes, 60)
+            logger.info(
+                f"Fora do horário permitido (08:00-19:00). Tempo restante até o próximo início: {hours:02d}:{minutes:02d}:{seconds:02d}. Checando novamente em 10 minutos..."
+            )
+            stop_event.wait(600)  # 10 minutos
     logger.info("Execução encerrada.")
 
 
