@@ -144,7 +144,9 @@ def loop_pipeline(Session, logger):
             minutes, seconds = divmod(time_remaining.seconds, 60)
             hours, minutes = divmod(minutes, 60)
             logger.info(
-                f"Fora do horário permitido (08:00-19:00). Tempo restante até o próximo início: {hours:02d}:{minutes:02d}:{seconds:02d}. Checando novamente em 10 minutos..."
+                f"Fora do horário permitido (08:00-19:00). "
+                f"Tempo restante até o próximo início: {hours:02d}:{minutes:02d}:{seconds:02d}. "
+                f"Checando novamente em 10 minutos..."
             )
             stop_event.wait(600)  # 10 minutos
     logger.info("Execução encerrada.")
