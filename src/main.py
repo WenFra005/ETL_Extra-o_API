@@ -38,16 +38,19 @@ def handle_sigterm(_signum, _frame):
 
 def is_within_allowed_time():
     """
-    Verifica se o horário atual está dentro do intervalo permitido para a execução do pipeline.
-    O intervalo permitido é das 08:00 às 19:00 (horário local).
+    Verifica se o horário atual está dentro do intervalo permitido para execução do pipeline.
+    O intervalo permitido é de segunda a sexta-feira, das 08:00 às 19:00 (horário de São Paulo).
 
     Returns
     -------
     bool
-        Retorna True se o horário atual estiver dentro do intervalo permitido, caso contrário,
-        retorna False.
+        Retorna True se o horário atual estiver dentro do intervalo permitido,
+        caso contrário, retorna False.
     """
     now = datetime.datetime.now(ZoneInfo("America/Sao_Paulo"))
+    # Verifica se é fim de semana (5 = sábado, 6 = domingo)
+    if now.weekday() >= 5:
+        return False
     start = now.replace(hour=8, minute=0, second=0, microsecond=0)
     end = now.replace(hour=19, minute=0, second=0, microsecond=0)
     return start <= now <= end
@@ -55,20 +58,26 @@ def is_within_allowed_time():
 
 def time_until_next_start():
     """
-    Calcula o tempo restante até o próximo início permitido do pipeline, que é às 08:00
-    do dia seguinte.
-    Se o horário atual já for após as 08:00, o próximo início será no dia seguinte às 08:00.
+    Calcula o tempo restante até o próximo início permitido do pipeline, que é às 08:00 do dia
+    seguinte, considerando que o pipeline só pode ser executado de segunda a sexta-feira,
+    das 08:00 às 19:00.
 
     Returns
     -------
     datetime.timedelta
-        Um objeto timedelta representando o tempo restante até o próximo início permitido do
-        pipeline.
+        Retorna um objeto timedelta representando o tempo restante até o próximo início permitido.
     """
     now = datetime.datetime.now(ZoneInfo("America/Sao_Paulo"))
     next_start = now.replace(hour=8, minute=0, second=0, microsecond=0)
+
+    # Se já passou das 8h hoje, vai para o próximo dia
     if now >= next_start:
         next_start = next_start + datetime.timedelta(days=1)
+
+    # Pula sábados e domingos
+    while next_start.weekday() >= 5:  # 5 = sábado, 6 = domingo
+        next_start = next_start + datetime.timedelta(days=1)
+
     return next_start - now
 
 
