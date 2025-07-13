@@ -3,24 +3,9 @@ version: 2
 updates:
   # Atualizações de dependências Python
   - package-ecosystem: "pip"
-    directory: "."
+    directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/Sao_Paulo"
-    open-pull-requests-limit: 10
-    reviewers:
-      - "WenFra005"
-    assignees:
-      - "WenFra005"
+      interval: "monthly"
     commit-message:
       prefix: "chore"
-      include: "scope"
-    labels:
-      - "dependencies"
-      - "python"
-    ignore:
-      # Ignorar atualizações de versões major (quebram compatibilidade)
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"] 
+      include: "scope" 
