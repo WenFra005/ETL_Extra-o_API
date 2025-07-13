@@ -19,15 +19,14 @@ O **ETL Extract API** é um sistema completo de monitoramento e análise de dado
 - Interface responsiva e intuitiva
 
 ### 🔌 API REST
-- Endpoints para consulta de dados históricos
 - Health check para monitoramento do sistema
-- Execução manual do pipeline via web
+- Endpoints de status dos serviços
 
 ## 🛠️ Tecnologias Utilizadas
 
 ### Backend
 - **Python 3.10+** - Linguagem principal
-- **FastAPI/Flask** - Framework web para APIs
+- **Flask** - Framework web para APIs
 - **SQLAlchemy** - ORM para banco de dados
 - **PostgreSQL** - Banco de dados relacional
 - **Pandas** - Manipulação e análise de dados
@@ -81,6 +80,7 @@ ETL_Extract_API/
 │   ├── config/              # Configurações
 │   │   └── config.py        # Variáveis de ambiente
 │   └── main.py              # Execução local do pipeline
+├── docs/                    # Documentação MkDocs
 ├── requirements.txt         # Dependências Python
 ├── production_checklist.md  # Checklist para produção
 └── README.md               # Esta documentação
@@ -144,7 +144,7 @@ O projeto está configurado para deploy automático no Render com:
 
 ### Dashboard
 - ✅ Visualização em tempo real
-- ✅ Filtros por período
+- ✅ Filtros por período (hora, dia, semana, mês)
 - ✅ Gráficos interativos
 - ✅ Métricas estatísticas
 - ✅ Interface responsiva
@@ -153,13 +153,13 @@ O projeto está configurado para deploy automático no Render com:
 - ✅ Extração automática
 - ✅ Validação de dados
 - ✅ Armazenamento histórico
-- ✅ Execução agendada
+- ✅ Execução agendada (08:00-19:00, dias úteis)
 - ✅ Logs estruturados
+- ✅ Controle de horário e dias da semana
 
 ### API
-- ✅ Endpoints REST
-- ✅ Health check
-- ✅ Execução manual
+- ✅ Health check (`/health`)
+- ✅ Status do pipeline (`/health-pipeline`)
 - ✅ Documentação automática
 
 ## 🔍 Monitoramento e Logs
@@ -169,6 +169,27 @@ O sistema inclui:
 - **Health check** para monitoramento
 - **Métricas de performance**
 - **Tratamento de erros**
+- **Controle de execução por horário**
+
+## 📖 Documentação
+
+### 📚 Documentação Online
+- **Site da documentação**: [ETL Extract API Docs](https://wenfra005.github.io/ETL_Extract_API/)
+- **Referência da API**: Documentação automática das funções e classes
+
+### 🔧 Documentação Local
+- **Pasta `/docs`**: Documentação técnica completa
+- **README.md**: Este arquivo - guia rápido de início
+- **Geração local**: Execute `mkdocs serve` para visualizar localmente
+
+### 📋 Páginas Disponíveis
+- **[Visão Geral](docs/index.md)** - Introdução e arquitetura
+- **[API](docs/api.md)** - Endpoints de health check
+- **[Pipeline ETL](docs/pipeline.md)** - Fluxo de dados
+- **[Dashboard](docs/dashboard.md)** - Interface de visualização
+- **[Banco de Dados](docs/database.md)** - Modelos e estrutura
+- **[Configuração](docs/config.md)** - Setup e variáveis
+- **[Referência](docs/referencia.md)** - Documentação técnica automática
 
 ## 🤝 Contribuição
 
@@ -188,5 +209,6 @@ Este projeto está sob a licença [MIT](LICENSE).
 
 Para dúvidas ou suporte:
 - Abra uma [issue](https://github.com/WenFra005/ETL_Extract_API/issues)
+- Consulte a [documentação online](https://wenfra005.github.io/ETL_Extract_API/)
 - Entre em contato através do GitHub
 
