@@ -3,7 +3,7 @@ version: 2
 updates:
   # Atualizações de dependências Python
   - package-ecosystem: "pip"
-    directory: "/"
+    directory: "."
     schedule:
       interval: "weekly"
       day: "monday"
