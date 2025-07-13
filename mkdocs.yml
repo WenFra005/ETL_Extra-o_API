@@ -1,0 +1,81 @@
+site_name: ETL Extract API - Documentação
+site_description: Sistema de extração, transformação e carga de dados de cotação do dólar
+site_author: Wendell Francisco
+site_url: https://github.com/WenFra005/ETL_Extract_API
+
+# Tema
+theme:
+  name: material
+  language: pt
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Alternar modo escuro
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Alternar modo claro
+
+# Plugins
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: [.]
+          options:
+            show_source: true
+            show_root_heading: true
+            docstring_style: numpy
+
+# Estrutura da navegação
+nav:
+  - Início: index.md
+  - Configuração: config.md
+  - API: api.md
+  - Pipeline ETL: pipeline.md
+  - Dashboard: dashboard.md
+  - Banco de Dados: database.md
+  - Referência da API: referencia.md
+
+# Configurações extras
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.arithmatex
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+# Configurações do repositório
+repo_name: ETL_Extract_API
+repo_url: https://github.com/WenFra005/ETL_Extract_API
+edit_uri: edit/main/docs/
+
+# Copyright
+copyright: Copyright &copy; 2024 
