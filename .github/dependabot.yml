@@ -16,7 +16,6 @@ updates:
       - "WenFra005"
     commit-message:
       prefix: "chore"
-      prefix-development: "chore"
       include: "scope"
     labels:
       - "dependencies"
