@@ -29,17 +29,27 @@ engine = create_engine(DATABASE_URL)
 
 def read_data_from_db():
     """
-    Extrai dados do banco de dados PostgreSQL e retorna um DataFrame com os dados do dólar.
+    Lê os dados do dólar armazenados no banco de dados PostgreSQL.
+    Conecta ao banco de dados e executa uma consulta SQL para obter os dados mais recentes
+    sobre a cotação do dólar, incluindo moeda de origem, moeda de destino, valor de compra
+    e timestamp da cotação.
 
     Returns
     -------
-    df : pd.DataFrame
-        Um DataFrame contendo os dados do dólar.
+    pd.DataFrame
+        Um DataFrame do Pandas contendo os dados lidos do banco de dados, com colunas para:
+        - moeda_origem: Código da moeda de origem (ex: USD)
+        - moeda_destino: Código da moeda de destino (ex: BRL)
+        - valor_de_compra: Valor de compra do dólar em relação ao real
+        - timestamp_moeda: Timestamp da cotação (com timezone São Paulo)
+    None
+        Se ocorrer um erro ao conectar ao banco de dados ou ao ler os dados, retorna um DataFrame vazio.
 
     Raises
     ------
     Exception
-        Se ocorrer um erro ao conectar ao banco de dados.
+        Se ocorrer um erro ao conectar ao banco de dados ou ao ler os dados, exibe uma mensagem de
+        erro no Streamlit.
     """
     try:
         query = """
@@ -60,16 +70,10 @@ def read_data_from_db():
 
 def main():
     """
-    Função principal do dashboard Streamlit para visualização dos dados do dólar.
-
-    Returns
-    -------
-    None
-
-    Raises
-    ------
-    Exception
-        Se ocorrer um erro ao conectar ao banco de dados ou ao ler os dados.
+    Função principal que configura o dashboard Streamlit e exibe os dados do dólar.
+    Configura o layout, título e descrição do dashboard, lê os dados do banco de dados
+    e exibe as informações em tabelas e gráficos interativos.
+    Também permite ao usuário selecionar diferentes períodos para visualizar a evolução do preço do dólar.
     """
     st.set_page_config(
         page_title="Dashboard de Dados do Dólar", page_icon=":dollar:", layout="wide"
