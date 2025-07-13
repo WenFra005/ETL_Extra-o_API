@@ -34,7 +34,6 @@ O **ETL Extract API** é um sistema completo de monitoramento e análise de dado
 
 ### Frontend
 - **Streamlit** - Dashboard interativo
-- **HTML/CSS** - Interface web
 
 ### Infraestrutura
 - **Render** - Plataforma de deploy na nuvem
