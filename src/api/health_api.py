@@ -1,20 +1,27 @@
 """
 Módulo responsável pelo endpoint de saúde (health check) do serviço.
+Este módulo define um endpoint `/health` que retorna o status do serviço em formato JSON.
 """
 
 import os
 
-from flask import Flask
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/health")
 def health():
     """
-    Endpoint de saúde do serviço. Retorna uma mensagem indicando que o serviço está ativo.
+    Endpoint de saúde do serviço.
+    Este endpoint retorna um JSON simples indicando que o serviço está ativo e funcionando.
+
+    Returns
+    -------
+    dict
+        Status do serviço em formato JSON.
     """
-    return "Serviço ativo e funcionando!"
+    return jsonify({"status": "ok"})
 
 
 if __name__ == "__main__":
