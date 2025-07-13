@@ -1,7 +1,11 @@
 """
 Módulo principal para execução do pipeline ETL de cotação do dólar (USD-BRL).
-Este script inicializa o ambiente, cria as tabelas e executa o pipeline de extração, transformação
-e carga.
+
+Este script inicializa o ambiente, cria as tabelas e executa o pipeline de extração,
+transformação e carga de dados de cotação do dólar.
+
+O pipeline executa automaticamente em horários específicos (08:00-19:00, dias úteis)
+e pode ser interrompido via SIGTERM ou Ctrl+C.
 """
 
 import datetime
@@ -22,8 +26,7 @@ stop_event = threading.Event()
 
 
 def handle_sigterm(_signum, _frame):
-    """
-    Gerencia o sinal de término (SIGTERM) para encerrar o pipeline.
+    """Gerencia o sinal de término (SIGTERM) para encerrar o pipeline.
 
     Parameters
     ----------
@@ -37,15 +40,16 @@ def handle_sigterm(_signum, _frame):
 
 
 def is_within_allowed_time():
-    """
-    Verifica se o horário atual está dentro do intervalo permitido para execução do pipeline.
-    O intervalo permitido é de segunda a sexta-feira, das 08:00 às 19:00 (horário de São Paulo).
+    """Verifica se o horário atual está dentro do intervalo permitido para execução.
+
+    O intervalo permitido é de segunda a sexta-feira, das 08:00 às 19:00
+    (horário de São Paulo).
 
     Returns
     -------
     bool
-        Retorna True se o horário atual estiver dentro do intervalo permitido,
-        caso contrário, retorna False.
+        True se o horário atual estiver dentro do intervalo permitido,
+        False caso contrário.
     """
     now = datetime.datetime.now(ZoneInfo("America/Sao_Paulo"))
     # Verifica se é fim de semana (5 = sábado, 6 = domingo)
@@ -57,15 +61,15 @@ def is_within_allowed_time():
 
 
 def time_until_next_start():
-    """
-    Calcula o tempo restante até o próximo início permitido do pipeline, que é às 08:00 do dia
-    seguinte, considerando que o pipeline só pode ser executado de segunda a sexta-feira,
+    """Calcula o tempo restante até o próximo início permitido do pipeline.
+
+    Considera que o pipeline só pode ser executado de segunda a sexta-feira,
     das 08:00 às 19:00.
 
     Returns
     -------
     datetime.timedelta
-        Retorna um objeto timedelta representando o tempo restante até o próximo início permitido.
+        Tempo restante até o próximo início permitido.
     """
     now = datetime.datetime.now(ZoneInfo("America/Sao_Paulo"))
     next_start = now.replace(hour=8, minute=0, second=0, microsecond=0)
@@ -82,34 +86,28 @@ def time_until_next_start():
 
 
 def create_tables(engine, logger):
-    """
-    Cria as tabelas no banco de dados PostgreSQL usando SQLAlchemy. Utiliza o objeto engine para
-    interagir com o banco de dados e cria as tabelas definidas no modelo Base.
+    """Cria as tabelas no banco de dados PostgreSQL usando SQLAlchemy.
 
     Parameters
     ----------
     engine : sqlalchemy.engine.Engine
-        Um objeto engine do SQLAlchemy configurado para se conectar ao banco de dados PostgreSQL.
-
+        Objeto engine do SQLAlchemy configurado para PostgreSQL.
     logger : logging.Logger
-        Um objeto logger configurado para registrar logs do pipeline de dados.
+        Logger para registrar logs do processo.
     """
     Base.metadata.create_all(engine)
     logger.info("Tabelas criadas/verificadas com sucesso.")
 
 
 def pipeline(Session, logger):
-    """
-    Executa o pipeline de dados, que consiste em extrair, transformar e salvar os dados
-    no banco de dados PostgreSQL.
+    """Executa o pipeline completo de dados (extract, transform, load).
 
     Parameters
     ----------
     Session : sqlalchemy.orm.session.Session
-        Uma classe de sessão do SQLAlchemy para interagir com o banco de dados.
-
+        Classe de sessão do SQLAlchemy para interagir com o banco.
     logger : logging.Logger
-        Um objeto logger configurado para registrar logs do pipeline de dados.
+        Logger para registrar logs do pipeline.
     """
     with logfire.span("Extraindo dados"):
         data = extract_data(logger)
@@ -128,15 +126,17 @@ def pipeline(Session, logger):
 
 
 def loop_pipeline(Session, logger):
-    """
-    Executa o pipeline de dados em um loop contínuo, com intervalos de espera entre as execuções.
+    """Executa o pipeline em loop contínuo com controle de horário.
+
+    O pipeline executa apenas dentro do horário permitido (08:00-19:00, dias úteis).
+    Fora do horário, aguarda e faz logs informativos.
 
     Parameters
     ----------
     Session : sqlalchemy.orm.session.Session
-        Uma classe de sessão do SQLAlchemy para interagir com o banco de dados.
+        Classe de sessão do SQLAlchemy para interagir com o banco.
     logger : logging.Logger
-        Um objeto logger configurado para registrar logs do pipeline de dados.
+        Logger para registrar logs do pipeline.
     """
     while not stop_event.is_set():
         if is_within_allowed_time():

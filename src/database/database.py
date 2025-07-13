@@ -1,5 +1,8 @@
 """
 Módulo de definição do modelo de dados e ORM para a tabela dolar_data no banco PostgreSQL.
+
+Este módulo define a estrutura da tabela que armazena os dados de cotação do dólar,
+incluindo campos para moedas, valores e timestamps.
 """
 
 from sqlalchemy import Column, DateTime, Float, Integer, String
@@ -9,13 +12,25 @@ Base = declarative_base()
 
 
 class DolarData(Base):
-    """
-    Classe que representa a tabela `dolar_data` no banco de dados.
+    """Classe que representa a tabela dolar_data no banco de dados.
 
-    Parameters
+    Esta classe define o modelo ORM para armazenar dados de cotação do dólar,
+    incluindo informações sobre moedas, valores de compra e timestamps.
+
+    Attributes
     ----------
-    Base : sqlalchemy.orm.declarative_base
-        Classe base do SQLAlchemy para a definição de modelos ORM.
+    id : int
+        Chave primária auto-incrementada.
+    moeda_origem : str
+        Código da moeda de origem (ex: USD).
+    moeda_destino : str
+        Código da moeda de destino (ex: BRL).
+    valor_de_compra : float
+        Valor de compra da moeda de origem em relação à de destino.
+    timestamp_moeda : datetime
+        Data e hora da cotação (com timezone).
+    timestamp_criacao : datetime
+        Data e hora de criação do registro no sistema (com timezone).
     """
 
     __tablename__ = "dolar_data"

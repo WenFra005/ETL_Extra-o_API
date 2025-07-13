@@ -1,5 +1,7 @@
 """
-Módulo de configuração do ambiente, variáveis e conexão com o banco de dados.
+Este módulo contém funções para configurar o ambiente de logging e a conexão com o banco de dados
+PostgreSQL. Ele carrega as variáveis de ambiente necessárias e define as configurações
+para o logger e a conexão com o banco de dados.
 """
 
 import logging
@@ -23,13 +25,14 @@ POSTGRES_DB = os.getenv("POSTGRES_DB")
 
 def configure_ambient_logging():
     """
-    Configura o ambiente de logging para o pipeline de dados. Configura o Logfire para registrar
-    logs e envia logs para o Logfire. Também configura o nível de log e os manipuladores de log.
+    Configura o ambiente de logging usando logfire e logging padrão do Python.
+    Carrega as variáveis de ambiente necessárias e define o logger para registrar logs no console e
+    no logfire.
 
     Returns
     -------
     logger : logging.Logger
-        Um objeto logger configurado para registrar logs do pipeline de dados.
+        Um objeto logger configurado para registrar logs no console e no logfire.
     """
     logfire.configure()
     basicConfig(handlers=[logfire.LogfireLoggingHandler()])

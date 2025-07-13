@@ -1,5 +1,8 @@
 """
 Módulo responsável pela transformação dos dados extraídos da cotação do dólar (USD-BRL).
+
+Este módulo processa os dados brutos recebidos da API e os converte para o formato
+padronizado usado internamente pelo sistema.
 """
 
 from datetime import UTC, datetime
@@ -7,25 +10,32 @@ from zoneinfo import ZoneInfo
 
 
 def transform_data(data):
-    """
-    Transforma os dados extraídos da API para o formato desejado. Extrai informações relevantes como
-    moeda de origem, moeda de destino, valor de compra, timestamp da moeda e timestamp de criação.
+    """Transforma os dados extraídos da API para o formato padronizado.
+
+    Extrai informações relevantes dos dados brutos da API e as converte para
+    o formato interno do sistema, incluindo conversão de timezone.
 
     Parameters
     ----------
     data : dict
-        Um dicionário contendo os dados extraídos da API, que deve conter a chave "USDBRL" com as
-        informações da cotação do dólar em relação ao real brasileiro.
+        Dicionário contendo os dados extraídos da API com a chave "USDBRL".
 
     Returns
     -------
-    data_transformed : dict
-        Um dicionário contendo os dados transformados, com as seguintes chaves:
+    dict
+        Dicionário com os dados transformados contendo:
         - moeda_origem: Código da moeda de origem (USD)
         - moeda_destino: Código da moeda de destino (BRL)
         - valor_de_compra: Valor de compra do dólar em relação ao real
-        - timestamp_moeda: Timestamp da moeda convertido para o fuso horário de São Paulo
-        - timestamp_criacao: Timestamp da criação do registro no fuso horário de São Paulo
+        - timestamp_moeda: Timestamp da cotação (timezone São Paulo)
+        - timestamp_criacao: Timestamp de criação (timezone São Paulo)
+
+    Examples
+    --------
+    >>> raw_data = {"USDBRL": {"code": "USD", "codein": "BRL", "bid": "5.12", "timestamp": "1640995200"}}
+    >>> transformed = transform_data(raw_data)
+    >>> print(transformed["valor_de_compra"])
+    5.12
     """
     moeda_origem = data["USDBRL"]["code"]
     moeda_destino = data["USDBRL"]["codein"]
