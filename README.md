@@ -81,7 +81,6 @@ ETL_Extract_API/
 │   └── main.py              # Execução local do pipeline
 ├── docs/                    # Documentação MkDocs
 ├── requirements.txt         # Dependências Python
-├── production_checklist.md  # Checklist para produção
 └── README.md               # Esta documentação
 ```
 
