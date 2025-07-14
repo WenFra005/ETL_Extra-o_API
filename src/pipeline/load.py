@@ -5,7 +5,7 @@ Este módulo contém funções para persistir os dados processados no banco de d
 utilizando SQLAlchemy ORM para operações de inserção.
 """
 
-from src.database.database import Base, DolarData
+from src.database.database import DolarData
 
 
 def save_data_postgres(Session, data, logger):
@@ -41,8 +41,6 @@ def save_data_postgres(Session, data, logger):
     """
 
     session = Session()
-    # Garante que as tabelas existem antes de inserir
-    Base.metadata.create_all(session.get_bind())
     try:
         novo_registro = DolarData(**data)
         session.add(novo_registro)
