@@ -2,7 +2,7 @@
 
 ## 📊 Sobre o Projeto
 
-O **ETL Extract API** é um sistema completo de monitoramento e análise de dados de cotação do dólar (USD-BRL) em tempo real. Este projeto implementa um pipeline ETL (Extract, Transform, Load) automatizado que coleta dados de APIs externas, processa as informações e disponibiliza visualizações interativas através de um dashboard moderno.
+O **ETL Extract API** é um sistema completo de monitoramento e análise de dados de cotação do dólar (USD-BRL) em tempo real, criado como exercício prático de conceitos de ETL, API REST, dashboard interativo e integração com banco de dados. O objetivo principal é servir como referência didática para quem deseja aprender sobre esses temas na prática.
 
 ## 🎯 O que este projeto faz?
 
@@ -42,23 +42,13 @@ O **ETL Extract API** é um sistema completo de monitoramento e análise de dado
 
 ## 🚀 Qual é a utilidade deste projeto?
 
-### Para Investidores e Traders
-- **Monitoramento em tempo real** da cotação do dólar
-- **Análise histórica** para tomada de decisões
-- **Alertas visuais** sobre tendências de mercado
-- **Dados confiáveis** para estratégias de investimento
+Este projeto é voltado para fins de estudo e demonstração. Ele pode ser útil para:
 
-### Para Desenvolvedores
-- **Exemplo prático** de implementação de pipeline ETL
-- **Arquitetura escalável** para projetos de dados
-- **Integração com APIs** externas
-- **Deploy automatizado** na nuvem
+- **Estudantes e desenvolvedores** que queiram entender na prática como construir um pipeline ETL, expor dados via API, criar dashboards com Streamlit e integrar com banco de dados.
+- **Exemplos de arquitetura** para projetos de dados.
+- **Exploração de integração com APIs externas** e automação de processos de dados.
 
-### Para Empresas
-- **Monitoramento de risco cambial**
-- **Dados para relatórios financeiros**
-- **Base para sistemas de trading automatizado**
-- **Análise de impacto econômico**
+> **Não recomendado para uso em produção ou aplicações críticas.**
 
 ## 📁 Estrutura do Projeto
 
@@ -192,10 +182,10 @@ O sistema inclui:
 
 ## 🤝 Contribuição
 
-Contribuições são bem-vindas! Para contribuir:
+Este projeto não é mantido ativamente, mas contribuições, sugestões ou correções são bem-vindas para fins de aprendizado coletivo!
 
-1. Fork o projeto
-2. Crie uma branch para sua feature
+1. Fork o projeto (opcional)
+2. Crie uma branch para sua feature ou ajuste
 3. Commit suas mudanças
 4. Push para a branch
 5. Abra um Pull Request
