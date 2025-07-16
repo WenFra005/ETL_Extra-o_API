@@ -1,5 +1,9 @@
 # ETL Extract API - Sistema de Monitoramento de Cotação do Dólar
 
+## 🎥 Demonstração
+
+![Demonstração do Projeto](assets/demo.gif)
+
 ## 📊 Sobre o Projeto
 
 O **ETL Extract API** é um sistema completo de monitoramento e análise de dados de cotação do dólar (USD-BRL) em tempo real, criado como exercício prático de conceitos de ETL, API REST, dashboard interativo e integração com banco de dados. O objetivo principal é servir como referência didática para quem deseja aprender sobre esses temas na prática.
