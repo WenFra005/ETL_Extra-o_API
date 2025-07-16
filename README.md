@@ -105,6 +105,10 @@ POSTGRES_DB=etl_dolar
 TOKEN_AWESOMEAPI=seu_token
 ```
 
+### 🔗 Links Úteis da AwesomeAPI
+- [Documentação da AwesomeAPI - Cotações](https://docs.awesomeapi.com.br/api-de-moedas)
+- [Cadastro para obter token gratuito](https://awesomeapi.com.br/)
+
 ## 🚀 Como Executar
 
 ### Execução Local
