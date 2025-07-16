@@ -131,7 +131,7 @@ python src/api/pipeline_web.py
 ```
 
 ### Deploy na Nuvem (Render)
-O projeto está configurado para deploy automático no Render com:
+O projeto está configurado para deploy automático no Render (utilizando o plano gratuito) com:
 - Dashboard público para visualização
 - Pipeline executando em background
 - Health check para monitoramento
