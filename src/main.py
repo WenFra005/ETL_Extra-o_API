@@ -100,7 +100,22 @@ def create_tables(engine, logger):
 
 
 def is_db_empty(Session):
-    """Verifica se a tabela dolar_data está vazia."""
+    """
+    Verifica se o banco de dados está vazio.
+    Esta função consulta a tabela DolarData para verificar se não há registros.
+
+
+    Parameters
+    ----------
+    Session : sqlalchemy.orm.session.Session
+        Classe de sessão do SQLAlchemy para interagir com o banco.
+
+    Returns
+    -------
+    bool
+        True se o banco de dados estiver vazio (sem registros na tabela DolarData),
+        False caso contrário.
+    """
     session = Session()
     try:
         count = session.query(DolarData).count()
@@ -110,7 +125,19 @@ def is_db_empty(Session):
 
 
 def pipeline(Session, logger):
-    """Executa o pipeline completo de dados (extract, transform, load)."""
+    """
+    Executa o pipeline ETL de cotação do dólar (USD-BRL).
+    O pipeline verifica se o banco de dados está vazio. Se estiver, realiza uma carga histórica
+    inicial dos últimos 3 meses. Caso contrário, executa o pipeline normal de extração,
+    transformação e carga.
+
+    Parameters
+    ----------
+    Session : sqlalchemy.orm.session.Session
+        Classe de sessão do SQLAlchemy para interagir com o banco.
+    logger : logging.Logger
+        Logger para registrar logs do processo de ETL.
+    """
     if is_db_empty(Session):
         with logfire.span("Carga histórica inicial"):
             logger.info(

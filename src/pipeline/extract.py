@@ -11,7 +11,8 @@ from src.config.config import TOKEN_AWESOMEAPI
 
 
 def extract_data(logger):
-    """Extrai dados da API AwesomeAPI para obter a cotação do dólar (USD-BRL).
+    """
+    Extrai dados da API AwesomeAPI para obter a cotação do dólar (USD-BRL).
 
     Faz uma requisição HTTP para a API AwesomeAPI para obter dados atualizados
     da cotação do dólar em relação ao real brasileiro.
@@ -44,19 +45,23 @@ def extract_data(logger):
 
 
 def extract_historical_data(logger, days=90):
-    """Extrai dados históricos da API AwesomeAPI para os últimos N dias (máx 90 dias).
+    """
+    Extrai dados históricos da cotação do dólar (USD-BRL) da API AwesomeAPI.
+    Faz uma requisição HTTP para a API AwesomeAPI para obter dados históricos
+    da cotação do dólar em relação ao real brasileiro, limitando a quantidade de dias.
 
     Parameters
     ----------
     logger : logging.Logger
         Logger para registrar logs do processo de extração.
     days : int, optional
-        Número de dias a extrair (padrão 90, máximo 90).
+        Número de dias para extrair dados históricos com valor máximo de 90 dias, by default 90.
 
     Returns
     -------
     list or None
-        Lista de dicionários com os dados extraídos, ou None se houver erro.
+        Lista de dicionários contendo os dados históricos extraídos da API,
+        ou None se houver erro.
     """
     if days > 90:
         days = 90

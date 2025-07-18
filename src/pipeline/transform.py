@@ -57,17 +57,30 @@ def transform_data(data):
 
 
 def transform_historical_data(data_list):
-    """Transforma uma lista de cotações históricas da API para o formato padronizado.
+    """
+    Transforma uma lista de dados históricos extraídos da API para o formato padronizado.
 
     Parameters
     ----------
     data_list : list
-        Lista de dicionários retornados pela API histórica.
+        Lista de dicionários contendo dados históricos extraídos da API,
+        onde cada dicionário representa uma cotação do dólar.
 
     Returns
     -------
     list
-        Lista de dicionários transformados prontos para inserção no banco.
+        Lista de dicionários com os dados transformados, cada um contendo:
+        - moeda_origem: Código da moeda de origem (USD)
+        - moeda_destino: Código da moeda de destino (BRL)
+        - valor_de_compra: Valor de compra do dólar em relação ao real
+        - timestamp_moeda: Timestamp da cotação (timezone São Paulo)
+        - timestamp_criacao: Timestamp de criação (timezone São Paulo)
+    Examples
+    --------
+    >>> historical_data = [
+    ...     {"code": "USD", "codein": "BRL", "bid": "5.12", "timestamp": "1640995200"},
+    ...     {"code": "USD", "codein": "BRL", "bid": "5.15", "timestamp": "1641081600"}
+    ... ]
     """
     from datetime import UTC, datetime
     from zoneinfo import ZoneInfo
