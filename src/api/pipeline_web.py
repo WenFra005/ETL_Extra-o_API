@@ -9,13 +9,20 @@ import threading
 
 from flask import Flask, jsonify
 
-from src.main import configure_ambient_logging, configure_database, loop_pipeline
+from src.database.database import Base
+from src.main import (
+    configure_ambient_logging,
+    configure_database,
+    create_tables,
+    loop_pipeline,
+)
 
 app = Flask(__name__)
 
 # Inicializa o pipeline em background assim que o módulo é importado (necessário para Gunicorn)
 logger = configure_ambient_logging()
 engine, Session = configure_database()
+create_tables(engine, logger)
 pipeline_thread = threading.Thread(target=loop_pipeline, args=(Session, logger))
 pipeline_thread.start()
 
