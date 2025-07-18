@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://github.com/WenFra005/ETL_Extract_API/</loc>
+         <lastmod>2025-07-18</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/WenFra005/ETL_Extract_API/api/</loc>
+         <lastmod>2025-07-18</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/WenFra005/ETL_Extract_API/config/</loc>
+         <lastmod>2025-07-18</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/WenFra005/ETL_Extract_API/dashboard/</loc>
+         <lastmod>2025-07-18</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/WenFra005/ETL_Extract_API/database/</loc>
+         <lastmod>2025-07-18</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/WenFra005/ETL_Extract_API/pipeline/</loc>
+         <lastmod>2025-07-18</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/WenFra005/ETL_Extract_API/referencia/</loc>
+         <lastmod>2025-07-18</lastmod>
+    </url>
+</urlset>
