@@ -35,11 +35,6 @@ Modelos ORM e configurações de conexão com o banco de dados.
 
 ## 🔌 APIs Web
 
-### src.api.health_api
-Endpoints de health check para monitoramento do sistema.
-
-::: src.api.health_api
-
 ### src.api.pipeline_web
 Serviço web para execução do pipeline ETL via HTTP.
 
