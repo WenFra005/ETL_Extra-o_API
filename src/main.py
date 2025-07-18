@@ -17,10 +17,10 @@ from zoneinfo import ZoneInfo
 import logfire
 
 from src.config.config import configure_ambient_logging, configure_database
-from src.database.database import Base
-from src.pipeline.extract import extract_data
+from src.database.database import Base, DolarData
+from src.pipeline.extract import extract_data, extract_historical_data
 from src.pipeline.load import save_data_postgres
-from src.pipeline.transform import transform_data
+from src.pipeline.transform import transform_data, transform_historical_data
 
 stop_event = threading.Event()
 
@@ -99,29 +99,39 @@ def create_tables(engine, logger):
     logger.info("Tabelas criadas/verificadas com sucesso.")
 
 
-def pipeline(Session, logger):
-    """Executa o pipeline completo de dados (extract, transform, load).
+def is_db_empty(Session):
+    """Verifica se a tabela dolar_data está vazia."""
+    session = Session()
+    try:
+        count = session.query(DolarData).count()
+        return count == 0
+    finally:
+        session.close()
 
-    Parameters
-    ----------
-    Session : sqlalchemy.orm.session.Session
-        Classe de sessão do SQLAlchemy para interagir com o banco.
-    logger : logging.Logger
-        Logger para registrar logs do pipeline.
-    """
+
+def pipeline(Session, logger):
+    """Executa o pipeline completo de dados (extract, transform, load)."""
+    if is_db_empty(Session):
+        logger.info("Banco de dados vazio. Extraindo histórico dos últimos 3 meses...")
+        data_hist = extract_historical_data(logger, days=90)
+        if not data_hist:
+            logger.error("Falha ao extrair dados históricos. Encerrando o pipeline.")
+            return
+        transformed_list = transform_historical_data(data_hist)
+        for item in transformed_list:
+            save_data_postgres(Session, item, logger)
+        logger.info("Carga histórica concluída com sucesso.")
+        return
+    # Pipeline normal
     with logfire.span("Extraindo dados"):
         data = extract_data(logger)
-
     if not data:
         logger.error("Nenhum dado foi extraído. Encerrando o pipeline.")
         return
-
     with logfire.span("Transformando dados"):
         transformed_data = transform_data(data)
-
     with logfire.span("Salvando dados no PostgreSQL"):
         save_data_postgres(Session, transformed_data, logger)
-
     logger.info("Pipeline de dados concluído com sucesso.")
 
 
