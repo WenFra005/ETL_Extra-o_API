@@ -41,3 +41,31 @@ def extract_data(logger):
     else:
         logger.error(f"Erro ao acessar a API: {response.status_code} - {response.text}")
         return None
+
+
+def extract_historical_data(logger, days=90):
+    """Extrai dados históricos da API AwesomeAPI para os últimos N dias (máx 90 dias).
+
+    Parameters
+    ----------
+    logger : logging.Logger
+        Logger para registrar logs do processo de extração.
+    days : int, optional
+        Número de dias a extrair (padrão 90, máximo 90).
+
+    Returns
+    -------
+    list or None
+        Lista de dicionários com os dados extraídos, ou None se houver erro.
+    """
+    if days > 90:
+        days = 90
+    url = f"https://economia.awesomeapi.com.br/json/daily/USD-BRL/{days}?token={TOKEN_AWESOMEAPI}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        logger.error(
+            f"Erro ao acessar a API histórica: {response.status_code} - {response.text}"
+        )
+        return None
