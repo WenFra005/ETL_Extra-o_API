@@ -54,3 +54,40 @@ def transform_data(data):
     }
 
     return data_transformed
+
+
+def transform_historical_data(data_list):
+    """Transforma uma lista de cotações históricas da API para o formato padronizado.
+
+    Parameters
+    ----------
+    data_list : list
+        Lista de dicionários retornados pela API histórica.
+
+    Returns
+    -------
+    list
+        Lista de dicionários transformados prontos para inserção no banco.
+    """
+    from datetime import UTC, datetime
+    from zoneinfo import ZoneInfo
+
+    transformed = []
+    for data in data_list:
+        moeda_origem = data["code"]
+        moeda_destino = data["codein"]
+        valor_de_compra = data["bid"]
+        timestamp_moeda = datetime.fromtimestamp(
+            int(data["timestamp"]), tz=UTC
+        ).astimezone(ZoneInfo("America/Sao_Paulo"))
+        timestamp_criacao = datetime.now(UTC).astimezone(ZoneInfo("America/Sao_Paulo"))
+        transformed.append(
+            {
+                "moeda_origem": moeda_origem,
+                "moeda_destino": moeda_destino,
+                "valor_de_compra": valor_de_compra,
+                "timestamp_moeda": timestamp_moeda,
+                "timestamp_criacao": timestamp_criacao,
+            }
+        )
+    return transformed
