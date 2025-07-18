@@ -63,9 +63,15 @@ def extract_historical_data(logger, days=90):
     url = f"https://economia.awesomeapi.com.br/json/daily/USD-BRL/{days}?token={TOKEN_AWESOMEAPI}"
     response = requests.get(url)
     if response.status_code == 200:
-        return response.json()
+        data = response.json()
+        if isinstance(data, list):
+            return data
+        else:
+            logger.error(
+                f"Resposta inesperada da API histórica: {data} (esperado uma lista de dicionários)."
+            )
+            return None
     else:
         logger.error(
             f"Erro ao acessar a API histórica: {response.status_code} - {response.text}"
         )
-        return None
