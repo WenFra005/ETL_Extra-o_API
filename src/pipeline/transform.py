@@ -73,9 +73,10 @@ def transform_historical_data(data_list):
     from zoneinfo import ZoneInfo
 
     transformed = []
+    # Pega code e codein do primeiro item (sempre tem)
+    moeda_origem = data_list[0].get("code", "USD")
+    moeda_destino = data_list[0].get("codein", "BRL")
     for data in data_list:
-        moeda_origem = data["code"]
-        moeda_destino = data["codein"]
         valor_de_compra = data["bid"]
         timestamp_moeda = datetime.fromtimestamp(
             int(data["timestamp"]), tz=UTC
@@ -83,8 +84,8 @@ def transform_historical_data(data_list):
         timestamp_criacao = datetime.now(UTC).astimezone(ZoneInfo("America/Sao_Paulo"))
         transformed.append(
             {
-                "moeda_origem": moeda_origem,
-                "moeda_destino": moeda_destino,
+                "moeda_origem": data.get("code", moeda_origem),
+                "moeda_destino": data.get("codein", moeda_destino),
                 "valor_de_compra": valor_de_compra,
                 "timestamp_moeda": timestamp_moeda,
                 "timestamp_criacao": timestamp_criacao,
