@@ -10,7 +10,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 
-@app.route("/health")
+@app.route("/")
 def health():
     """
     Endpoint de saúde do serviço.
