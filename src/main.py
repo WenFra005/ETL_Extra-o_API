@@ -179,12 +179,6 @@ if __name__ == "__main__":
     signal.signal(signal.SIGTERM, handle_sigterm)
     engine, Session = configure_database()
     create_tables(engine, logger)
-    # Listar tabelas existentes para depuração
-    from sqlalchemy import inspect
-
-    insp = inspect(engine)
-    tabelas = insp.get_table_names()
-    logger.info(f"Tabelas existentes no banco: {tabelas}")
     logger.info("Iniciando...")
 
     pipeline_thread = threading.Thread(target=loop_pipeline, args=(Session, logger))
