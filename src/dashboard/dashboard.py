@@ -177,6 +177,38 @@ def main():
             col1.metric("Preço Atual", "N/A")
             col2.metric("Preço Máximo", "N/A")
             col3.metric("Preço Mínimo", "N/A")
+
+        # Dados Estatísticos do dia atual
+        st.subheader("Dados Estatísticos do Dia")
+        hoje = agora.date()
+        df_dia = df[df["timestamp_moeda"].dt.date == hoje]
+        col1, col2, col3 = st.columns(3)
+        if not df_dia.empty:
+            preco_atual = df_dia["valor_de_compra"].iloc[-1]
+            preco_maximo = df_dia["valor_de_compra"].max()
+            preco_minimo = df_dia["valor_de_compra"].min()
+            col1.metric("Preço Atual (hoje)", f"R$ {preco_atual:.2f}")
+            col2.metric("Preço Máximo (hoje)", f"R$ {preco_maximo:.2f}")
+            col3.metric("Preço Mínimo (hoje)", f"R$ {preco_minimo:.2f}")
+        else:
+            col1.metric("Preço Atual (hoje)", "N/A")
+            col2.metric("Preço Máximo (hoje)", "N/A")
+            col3.metric("Preço Mínimo (hoje)", "N/A")
+
+        # Dados Estatísticos do período filtrado
+        st.subheader(f"Dados Estatísticos do Período Selecionado: {periodo_texto}")
+        col4, col5, col6 = st.columns(3)
+        if not df_filtrado.empty:
+            preco_atual_f = df_filtrado["valor_de_compra"].iloc[-1]
+            preco_maximo_f = df_filtrado["valor_de_compra"].max()
+            preco_minimo_f = df_filtrado["valor_de_compra"].min()
+            col4.metric("Preço Atual (período)", f"R$ {preco_atual_f:.2f}")
+            col5.metric("Preço Máximo (período)", f"R$ {preco_maximo_f:.2f}")
+            col6.metric("Preço Mínimo (período)", f"R$ {preco_minimo_f:.2f}")
+        else:
+            col4.metric("Preço Atual (período)", "N/A")
+            col5.metric("Preço Máximo (período)", "N/A")
+            col6.metric("Preço Mínimo (período)", "N/A")
     else:
         st.warning("Nenhum dado disponível para exibição.")
 
