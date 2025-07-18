@@ -112,15 +112,23 @@ def is_db_empty(Session):
 def pipeline(Session, logger):
     """Executa o pipeline completo de dados (extract, transform, load)."""
     if is_db_empty(Session):
-        logger.info("Banco de dados vazio. Extraindo histórico dos últimos 3 meses...")
-        data_hist = extract_historical_data(logger, days=90)
-        if not data_hist:
-            logger.error("Falha ao extrair dados históricos. Encerrando o pipeline.")
-            return
-        transformed_list = transform_historical_data(data_hist)
-        for item in transformed_list:
-            save_data_postgres(Session, item, logger)
-        logger.info("Carga histórica concluída com sucesso.")
+        with logfire.span("Carga histórica inicial"):
+            logger.info(
+                "Banco de dados vazio. Extraindo histórico dos últimos 3 meses..."
+            )
+            with logfire.span("Extraindo dados históricos"):
+                data_hist = extract_historical_data(logger, days=90)
+            if not data_hist:
+                logger.error(
+                    "Falha ao extrair dados históricos. Encerrando o pipeline."
+                )
+                return
+            with logfire.span("Transformando dados históricos"):
+                transformed_list = transform_historical_data(data_hist)
+            with logfire.span("Salvando dados históricos no PostgreSQL"):
+                for item in transformed_list:
+                    save_data_postgres(Session, item, logger)
+            logger.info("Carga histórica concluída com sucesso.")
         return
     # Pipeline normal
     with logfire.span("Extraindo dados"):
