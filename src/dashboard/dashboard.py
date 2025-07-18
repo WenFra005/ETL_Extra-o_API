@@ -160,24 +160,6 @@ def main():
         else:
             st.warning(f"Nenhum dado disponível para o período: {periodo_texto}")
 
-        st.subheader("Dados Estatísticos")
-        col1, col2, col3 = st.columns(3)
-
-        # Verificar se há dados filtrados antes de calcular métricas
-        if not df_filtrado.empty:
-            # Acessar valores diretamente do DataFrame
-            preco_atual = df_filtrado["valor_de_compra"].iloc[-1]
-            preco_maximo = df_filtrado["valor_de_compra"].max()
-            preco_minimo = df_filtrado["valor_de_compra"].min()
-
-            col1.metric("Preço Atual", f"R$ {preco_atual:.2f}")
-            col2.metric("Preço Máximo", f"R$ {preco_maximo:.2f}")
-            col3.metric("Preço Mínimo", f"R$ {preco_minimo:.2f}")
-        else:
-            col1.metric("Preço Atual", "N/A")
-            col2.metric("Preço Máximo", "N/A")
-            col3.metric("Preço Mínimo", "N/A")
-
         # Dados Estatísticos do dia atual
         st.subheader("Dados Estatísticos do Dia")
         hoje = agora.date()
